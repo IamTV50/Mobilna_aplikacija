@@ -53,6 +53,7 @@ import com.google.zxing.common.HybridBinarizer
 import com.google.zxing.qrcode.QRCodeReader
 
 class MainActivity : ComponentActivity() {
+    private var qrCodeScanned by mutableStateOf(false)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -87,9 +88,9 @@ class MainActivity : ComponentActivity() {
                     }
                 )
 
-                LaunchedEffect(buttonClicked.value) {
-                    if (buttonClicked.value) {
-                        launcher.launch(android.Manifest.permission.CAMERA)
+                LaunchedEffect(qrCodeScanned) {
+                    if (qrCodeScanned) {
+                        qrCodeScanned = false
                     }
                 }
 
@@ -165,25 +166,27 @@ fun CameraView(
         val selector = CameraSelector.Builder()
             .requireLensFacing(CameraSelector.LENS_FACING_BACK)
             .build()
+        var qrCodeFound = false
         preview.setSurfaceProvider(previewView.surfaceProvider)
         val imageAnalysis = ImageAnalysis.Builder()
             .build()
             .also {
-                it.setAnalyzer(Executors.newSingleThreadExecutor(),
-                    { image ->
-                        // Process the image and extract the code
-                        val result = processImage(image)
-                        if (!result.isNullOrEmpty()) {
-                            // Display the toast
-                            Toast.makeText(context, result, Toast.LENGTH_SHORT).show()
-                            Log.println(Log.INFO, "Result: ", result)
+                it.setAnalyzer(Executors.newFixedThreadPool(1)) { image ->
+                    // Process the image and extract the code
+                    val result = processImage(image)
+                    if (!result.isNullOrEmpty()) {
+                        // Display the toast
+                        Toast.makeText(context, result, Toast.LENGTH_SHORT).show()
+                        Log.println(Log.INFO, "Result: ", result)
 
 
-                            // Close the camera view
-                            onCodeScanned(result)
-                        }
-                        image.close()
-                    })
+                        // Close the camera view
+                        onCodeScanned(result)
+                        qrCodeFound = true
+                    }
+                    image.close() //why the FUCK do you close the entire APP! "!"=¨=!#JU¨!
+
+                }
             }
         try {
             cameraProviderFuture.get().bindToLifecycle(
