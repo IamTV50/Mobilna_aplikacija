@@ -1,4 +1,4 @@
-package com.example.mobilna_aplikacija_paketnik
+package com.example.mobilna_aplikacija_paketnik.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
