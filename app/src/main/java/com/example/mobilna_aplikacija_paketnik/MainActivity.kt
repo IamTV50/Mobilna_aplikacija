@@ -1,5 +1,6 @@
 package com.example.mobilna_aplikacija_paketnik
 
+import LoginScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,7 +12,6 @@ import com.example.mobilna_aplikacija_paketnik.API.Login.LoginRequest
 import com.example.mobilna_aplikacija_paketnik.API.Login.loginInterface
 import com.example.mobilna_aplikacija_paketnik.screens.CameraScreen
 import com.example.mobilna_aplikacija_paketnik.screens.HomeScreen
-import com.example.mobilna_aplikacija_paketnik.screens.LoginScreen
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
 
-            NavHost(navController, startDestination = "home") {
+            NavHost(navController, startDestination = "login") {
                 composable("home") {
                     HomeScreen(navController)
                 }
