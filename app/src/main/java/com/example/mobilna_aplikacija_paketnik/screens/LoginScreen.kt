@@ -23,32 +23,31 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.mobilna_aplikacija_paketnik.API.Login.LoginRequest
 import com.example.mobilna_aplikacija_paketnik.API.Login.loginInterface
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginForm(loginInter: loginInterface) {
-    var username = remember {mutableStateOf("") }
-    var password = remember {mutableStateOf("")}
+fun LoginForm(loginInter: loginInterface,navController: NavHostController) {
+    var username = remember { mutableStateOf("") }
+    var password = remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
 
     Column(modifier = Modifier.padding(16.dp)) {
         Text(text = "Username")
         TextField(
-            value = username,
-            onValueChange = { newValue -> username = newValue },
-            label = { Text("Username") },
+            value = username.value,
+            onValueChange = { newValue: String -> username.value = newValue },
             modifier = Modifier.fillMaxWidth(),
-            enabled = true
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(text = "Password")
         TextField(
-            value = password,
-            onValueChange = { newValue: MutableState<String> -> password = newValue },
+            value = password.value,
+            onValueChange = { newValue: String -> password.value = newValue },
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation()
         )
@@ -57,11 +56,12 @@ fun LoginForm(loginInter: loginInterface) {
 
         Button(
             onClick = {
-                val loginRequest = LoginRequest(username, password)
+                val loginRequest = LoginRequest(username.value, password.value)
                 coroutineScope.launch {
                     try {
                         val loginResponse = loginInter.login(loginRequest)
                         println("Login successful: ${loginResponse.username}")
+                        navController.navigate("home")
                     } catch (t: Throwable) {
                         println("Login failed: ${t.message}")
                     }
@@ -74,9 +74,8 @@ fun LoginForm(loginInter: loginInterface) {
     }
 }
 
-
 @Composable
-fun LoginScreen(loginInter: loginInterface) {
+fun LoginScreen(loginInter: loginInterface,navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -91,6 +90,6 @@ fun LoginScreen(loginInter: loginInterface) {
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        LoginForm(loginInter)
+        LoginForm(loginInter,navController)
     }
 }
