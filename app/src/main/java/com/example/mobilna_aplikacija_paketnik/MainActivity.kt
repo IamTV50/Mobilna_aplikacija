@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
                     CameraScreen(navController)
                 }
                 composable("login") {
-                    LoginScreen(loginInter)
+                    LoginScreen(loginInter,navController = navController)
                 }
             }
         }
