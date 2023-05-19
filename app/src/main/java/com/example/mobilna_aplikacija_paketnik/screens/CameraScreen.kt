@@ -33,7 +33,7 @@ fun CameraScreen(navController: NavController,OpenInter:OpenInterface) {
     val coroutineScope = rememberCoroutineScope()
 
     val qrCodeValue = remember { mutableStateOf("") }
-    val responseData = remember { mutableStateOf("") }
+    val response = remember { mutableStateOf("") }
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
@@ -72,7 +72,7 @@ fun CameraScreen(navController: NavController,OpenInter:OpenInterface) {
                             addAccessLog = true
                         )
                         val openBoxResponse = OpenInter.openBox(openBoxRequest)
-                        responseData.value = openBoxResponse.data
+                        response.value = openBoxResponse.result.toString()
                         println("Response: ${openBoxResponse.data}")
                     }catch (E:Exception){
                         println("Napaka v klicu API-ja" + E.message)
@@ -87,7 +87,10 @@ fun CameraScreen(navController: NavController,OpenInter:OpenInterface) {
             text = "QR Code Value: ${qrCodeValue.value}",
             modifier = Modifier.padding(top = 16.dp)
         )
-
+        Text(
+            text = "API response: ${response.value}",
+            modifier = Modifier.padding(top = 16.dp)
+        )
     }
 }
 
