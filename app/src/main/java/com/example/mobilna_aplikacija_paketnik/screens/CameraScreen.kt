@@ -43,7 +43,41 @@ fun CameraScreen(navController: NavController,OpenInter:OpenInterface) {
         val qrCode = result.data?.getStringExtra("SCAN_RESULT")
         qrCode?.let {
             qrCodeValue.value = it
-
+            coroutineScope.launch{
+                println("NEKAJ TU NOT ")
+                try{
+                    val openBoxRequest = OpenBoxRequest(
+                        deliveryId = 0,
+                        boxId = 540,
+                        tokenFormat = 5,
+                        latitude = 0.0,
+                        longitude = 0.0,
+                        qrCodeInfo = "string",
+                        terminalSeed = 0,
+                        isMultibox = false,
+                        doorIndex = 0,
+                        addAccessLog = true
+                    )
+                    val openBoxResponse = OpenInter.openBox(openBoxRequest)
+                    response.value = openBoxResponse.result.toString()
+                    print("Response: ${openBoxResponse.data}")
+                    println("ErrorNum:${openBoxResponse.errorNumber}")
+                    val decodedBytes = Base64.decode(openBoxResponse.data,Base64.DEFAULT)
+                    val decodedString = String(decodedBytes)
+                    val tempFile =
+                        withContext(Dispatchers.IO) {
+                            File.createTempFile("temp", ".mp3", context.cacheDir)
+                        }
+                    withContext(Dispatchers.IO) {
+                        FileOutputStream(tempFile).use { outputStream ->
+                            outputStream.write(decodedBytes)
+                        }
+                    }
+                    print("Dekodiran zeton: $decodedString")
+                }catch (E:Exception){
+                    println("Napaka v klicu API-ja" + E.message)
+                }
+            }
 
 
         }
@@ -58,41 +92,7 @@ fun CameraScreen(navController: NavController,OpenInter:OpenInterface) {
             onClick = {
                 val intent = Intent("com.google.zxing.client.android.SCAN")
                 launcher.launch(intent)
-                coroutineScope.launch{
-                    println("NEKAJ TU NOT ")
-                    try{
-                        val openBoxRequest = OpenBoxRequest(
-                            deliveryId = 0,
-                            boxId = 540,
-                            tokenFormat = 5,
-                            latitude = 0.0,
-                            longitude = 0.0,
-                            qrCodeInfo = "string",
-                            terminalSeed = 0,
-                            isMultibox = false,
-                            doorIndex = 0,
-                            addAccessLog = true
-                        )
-                        val openBoxResponse = OpenInter.openBox(openBoxRequest)
-                        response.value = openBoxResponse.result.toString()
-                        print("Response: ${openBoxResponse.data}")
-                        println("ErrorNum:${openBoxResponse.errorNumber}")
-                        val decodedBytes = Base64.decode(openBoxResponse.data,Base64.DEFAULT)
-                        val decodedString = String(decodedBytes)
-                        val tempFile =
-                            withContext(Dispatchers.IO) {
-                                File.createTempFile("temp", ".mp3", context.cacheDir)
-                            }
-                        withContext(Dispatchers.IO) {
-                            FileOutputStream(tempFile).use { outputStream ->
-                                outputStream.write(decodedBytes)
-                            }
-                        }
-                        print("Dekodiran zeton: $decodedString")
-                    }catch (E:Exception){
-                        println("Napaka v klicu API-ja" + E.message)
-                    }
-                }
+
             }
         ) {
             Text(text = "Scan QR Code")
