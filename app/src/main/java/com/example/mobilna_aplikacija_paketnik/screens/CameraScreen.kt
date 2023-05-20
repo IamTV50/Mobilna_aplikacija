@@ -73,7 +73,11 @@ fun CameraScreen(navController: NavController,OpenInter:OpenInterface) {
                         )
                         val openBoxResponse = OpenInter.openBox(openBoxRequest)
                         response.value = openBoxResponse.result.toString()
-                        println("Response: ${openBoxResponse.data}")
+                        print("Response: ${openBoxResponse.data}")
+                        println("ErrorNum:${openBoxResponse.errorNumber}")
+                        val decodedBytes = Base64.decode(openBoxResponse.data,Base64.DEFAULT)
+                        val decodedString = String(decodedBytes)
+                        print("Dekodiran zeton: $decodedString")
                     }catch (E:Exception){
                         println("Napaka v klicu API-ja" + E.message)
                     }
