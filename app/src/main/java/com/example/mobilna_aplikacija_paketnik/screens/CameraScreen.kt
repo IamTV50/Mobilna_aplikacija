@@ -72,6 +72,12 @@ fun CameraScreen(navController: NavController,OpenInter:OpenInterface) {
                         FileOutputStream(tempFile).use { outputStream ->
                             outputStream.write(decodedBytes)
                         }
+                        mediaPlayer.apply {
+                            reset()
+                            setDataSource(tempFile.absolutePath)
+                            prepare()
+                            start()
+                        }
                     }
                     print("Dekodiran zeton: $decodedString")
                 }catch (E:Exception){
