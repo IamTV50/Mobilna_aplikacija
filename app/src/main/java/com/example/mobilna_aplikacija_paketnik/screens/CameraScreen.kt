@@ -1,7 +1,8 @@
 package com.example.mobilna_aplikacija_paketnik.screens
 
 import android.content.Intent
-import android.util.Log
+import android.media.MediaPlayer
+import android.util.Base64
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -20,12 +21,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.mobilna_aplikacija_paketnik.OpenBox.OpenBoxRequest
-import com.example.mobilna_aplikacija_paketnik.OpenBox.OpenBoxResponse
 import com.example.mobilna_aplikacija_paketnik.OpenBox.OpenInterface
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import android.util.Base64
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
 
 @Composable
 fun CameraScreen(navController: NavController,OpenInter:OpenInterface) {
@@ -34,6 +35,7 @@ fun CameraScreen(navController: NavController,OpenInter:OpenInterface) {
 
     val qrCodeValue = remember { mutableStateOf("") }
     val response = remember { mutableStateOf("") }
+    val mediaPlayer = remember { MediaPlayer() }
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
@@ -77,6 +79,15 @@ fun CameraScreen(navController: NavController,OpenInter:OpenInterface) {
                         println("ErrorNum:${openBoxResponse.errorNumber}")
                         val decodedBytes = Base64.decode(openBoxResponse.data,Base64.DEFAULT)
                         val decodedString = String(decodedBytes)
+                        val tempFile =
+                            withContext(Dispatchers.IO) {
+                                File.createTempFile("temp", ".mp3", context.cacheDir)
+                            }
+                        withContext(Dispatchers.IO) {
+                            FileOutputStream(tempFile).use { outputStream ->
+                                outputStream.write(decodedBytes)
+                            }
+                        }
                         print("Dekodiran zeton: $decodedString")
                     }catch (E:Exception){
                         println("Napaka v klicu API-ja" + E.message)
