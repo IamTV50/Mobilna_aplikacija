@@ -43,12 +43,14 @@ fun CameraScreen(navController: NavController,OpenInter:OpenInterface) {
         val qrCode = result.data?.getStringExtra("SCAN_RESULT")
         qrCode?.let {
             qrCodeValue.value = it
+            val iskandel = it.split("/")
+            val boxId = iskandel.getOrNull(2)?.toIntOrNull() ?: 0
             coroutineScope.launch{
                 println("NEKAJ TU NOT ")
                 try{
                     val openBoxRequest = OpenBoxRequest(
                         deliveryId = 0,
-                        boxId = 540,
+                        boxId = boxId,
                         tokenFormat = 5,
                         latitude = 0.0,
                         longitude = 0.0,
