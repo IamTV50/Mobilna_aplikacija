@@ -1,6 +1,8 @@
 package com.example.mobilna_aplikacija_paketnik.screens
 
 import android.content.Intent
+import android.media.MediaPlayer
+import android.util.Base64
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -12,17 +14,28 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.mobilna_aplikacija_paketnik.OpenBox.OpenBoxRequest
+import com.example.mobilna_aplikacija_paketnik.OpenBox.OpenInterface
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
 
 @Composable
-fun CameraScreen(navController: NavController) {
+fun CameraScreen(navController: NavController,OpenInter:OpenInterface) {
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
 
     val qrCodeValue = remember { mutableStateOf("") }
+    val response = remember { mutableStateOf("") }
+    val mediaPlayer = remember { MediaPlayer() }
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
@@ -30,6 +43,51 @@ fun CameraScreen(navController: NavController) {
         val qrCode = result.data?.getStringExtra("SCAN_RESULT")
         qrCode?.let {
             qrCodeValue.value = it
+            val iskandel = it.split("/")
+            val boxId = iskandel.getOrNull(2)?.toIntOrNull() ?: 0
+            coroutineScope.launch{
+                println("NEKAJ TU NOT ")
+                try{
+                    val openBoxRequest = OpenBoxRequest(
+                        deliveryId = 0,
+                        boxId = boxId,
+                        tokenFormat = 5,
+                        latitude = 0.0,
+                        longitude = 0.0,
+                        qrCodeInfo = "string",
+                        terminalSeed = 0,
+                        isMultibox = false,
+                        doorIndex = 0,
+                        addAccessLog = true
+                    )
+                    val openBoxResponse = OpenInter.openBox(openBoxRequest)
+                    response.value = openBoxResponse.result.toString()
+                    print("Response: ${openBoxResponse.data}")
+                    println("ErrorNum:${openBoxResponse.errorNumber}")
+                    val decodedBytes = Base64.decode(openBoxResponse.data,Base64.DEFAULT)
+                    val decodedString = String(decodedBytes)
+                    val tempFile =
+                        withContext(Dispatchers.IO) {
+                            File.createTempFile("temp", ".mp3", context.cacheDir)
+                        }
+                    withContext(Dispatchers.IO) {
+                        FileOutputStream(tempFile).use { outputStream ->
+                            outputStream.write(decodedBytes)
+                        }
+                        mediaPlayer.apply {
+                            reset()
+                            setDataSource(tempFile.absolutePath)
+                            prepare()
+                            start()
+                        }
+                    }
+                    print("Dekodiran zeton: $decodedString")
+                }catch (E:Exception){
+                    println("Napaka v klicu API-ja" + E.message)
+                }
+            }
+
+
         }
     }
 
@@ -42,6 +100,7 @@ fun CameraScreen(navController: NavController) {
             onClick = {
                 val intent = Intent("com.google.zxing.client.android.SCAN")
                 launcher.launch(intent)
+
             }
         ) {
             Text(text = "Scan QR Code")
@@ -49,6 +108,10 @@ fun CameraScreen(navController: NavController) {
 
         Text(
             text = "QR Code Value: ${qrCodeValue.value}",
+            modifier = Modifier.padding(top = 16.dp)
+        )
+        Text(
+            text = "API response: ${response.value}",
             modifier = Modifier.padding(top = 16.dp)
         )
     }
