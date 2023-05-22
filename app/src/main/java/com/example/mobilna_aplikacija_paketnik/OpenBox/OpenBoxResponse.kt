@@ -1,5 +1,4 @@
 package com.example.mobilna_aplikacija_paketnik.OpenBox
-
 data class OpenBoxResponse(
     val result: Int,
     val message: String,
