@@ -1,4 +1,4 @@
-package com.example.mobilna_aplikacija_paketnik.OpenBox
+package com.example.mobilna_aplikacija_paketnik.API.OpenBox
 import retrofit2.http.Body
 import retrofit2.http.Headers
 import retrofit2.http.POST

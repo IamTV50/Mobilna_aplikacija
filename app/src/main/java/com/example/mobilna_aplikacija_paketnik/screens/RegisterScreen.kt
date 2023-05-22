@@ -1,5 +1,6 @@
 package com.example.mobilna_aplikacija_paketnik.screens
 
+import android.graphics.Bitmap
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
@@ -9,10 +10,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -23,7 +26,7 @@ import com.example.mobilna_aplikacija_paketnik.API.Register.RegisterInterFace
 import com.example.mobilna_aplikacija_paketnik.API.Register.RegisterRequest
 import kotlinx.coroutines.launch
 
-
+@ExperimentalMaterial3Api
 @Composable
 fun RegisterScreen(registerInter: RegisterInterFace, navController: NavController) {
     val username = remember { mutableStateOf("") }
@@ -50,16 +53,19 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
+        val capturedImages = remember { mutableStateListOf<Bitmap>() }
         val takePictureLauncher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.TakePicturePreview()
         ) { bitmap ->
             if (bitmap != null) {
-                // Shranimo slike
+                capturedImages.add(bitmap)
             }
         }
 
         Button(
-            onClick = { takePictureLauncher.launch() },
+            onClick = {
+                takePictureLauncher.launch()
+            },
             modifier = Modifier.fillMaxWidth()
         ) {
             Icon(Icons.Outlined.Add, contentDescription = "Open Camera")
@@ -68,10 +74,10 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
 
         Button(
             onClick = {
-                val regsiterRequest = RegisterRequest(username.value,gmail.value,password.value)
+                val registerRequest = RegisterRequest(username.value,gmail.value,password.value)
                 coroutineScope.launch {
                     try {
-                        val registerResponse = registerInter.register(regsiterRequest)
+                        val registerResponse = registerInter.register(registerRequest)
                         println("Register successful: ${registerResponse.username}")
                         navController.navigate("home")
                     } catch (t: Throwable) {

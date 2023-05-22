@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -22,6 +23,7 @@ import androidx.navigation.NavHostController
 import com.example.mobilna_aplikacija_paketnik.API.Login.LoginRequest
 import com.example.mobilna_aplikacija_paketnik.API.Login.LoginInterface
 import kotlinx.coroutines.launch
+@ExperimentalMaterial3Api
 @Composable
 fun LoginForm(loginInter: LoginInterface, navController: NavHostController) {
     val username = remember { mutableStateOf("") }
@@ -67,7 +69,7 @@ fun LoginForm(loginInter: LoginInterface, navController: NavHostController) {
         }
     }
 }
-
+@ExperimentalMaterial3Api
 @Composable
 fun LoginScreen(loginInter: LoginInterface, navController: NavHostController) {
     Column(

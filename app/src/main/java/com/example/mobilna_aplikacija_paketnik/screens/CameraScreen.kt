@@ -20,8 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.mobilna_aplikacija_paketnik.OpenBox.OpenBoxRequest
-import com.example.mobilna_aplikacija_paketnik.OpenBox.OpenInterface
+import com.example.mobilna_aplikacija_paketnik.API.OpenBox.OpenBoxRequest
+import com.example.mobilna_aplikacija_paketnik.API.OpenBox.OpenInterface
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -29,7 +29,7 @@ import java.io.File
 import java.io.FileOutputStream
 
 @Composable
-fun CameraScreen(navController: NavController,OpenInter:OpenInterface) {
+fun CameraScreen(navController: NavController,OpenInter: OpenInterface) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 

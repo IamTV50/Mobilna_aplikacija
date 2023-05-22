@@ -1,4 +1,4 @@
-package com.example.mobilna_aplikacija_paketnik.OpenBox
+package com.example.mobilna_aplikacija_paketnik.API.OpenBox
 
 data class OpenBoxRequest(
     val deliveryId: Int,
