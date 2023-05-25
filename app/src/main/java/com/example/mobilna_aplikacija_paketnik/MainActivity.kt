@@ -1,6 +1,6 @@
 package com.example.mobilna_aplikacija_paketnik
 
-import LoginScreen
+//import LoginScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -31,16 +31,16 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
 
-            NavHost(navController, startDestination = "login") {
+            NavHost(navController, startDestination = "home") {
                 composable("home") {
                     HomeScreen(navController)
                 }
                 composable("camera") {
                     CameraScreen(navController)
                 }
-                composable("login") {
+                /*composable("login") {
                     LoginScreen(loginInter)
-                }
+                }*/
             }
         }
     }

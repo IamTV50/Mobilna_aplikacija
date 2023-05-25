@@ -27,7 +27,7 @@ import com.example.mobilna_aplikacija_paketnik.API.Login.LoginRequest
 import com.example.mobilna_aplikacija_paketnik.API.Login.loginInterface
 import kotlinx.coroutines.launch
 
-@Composable
+Composable
 fun LoginForm(loginInter: loginInterface) {
     var username = remember {mutableStateOf("") }
     var password = remember {mutableStateOf("")}
