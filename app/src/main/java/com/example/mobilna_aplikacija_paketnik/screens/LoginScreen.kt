@@ -61,14 +61,19 @@ fun LoginForm(loginInter: LoginInterface, navController: NavHostController,conte
                 val loginRequest = LoginRequest(username.value, password.value)
                 coroutineScope.launch {
                     try {
+
                         val loginResponse = loginInter.login(loginRequest)
                         val gson = Gson()
-                        //val user_id = gson.fromJson(loginResponse.user_id, ObjectId::class.java)
+                        //val user_id = gson.fromJson(loginResponse.user_id, String::class.java)
                         val sharedPreferences = context.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
-                        //sharedPreferences.edit().putString("user_id", loginResponse.user_id).apply()
+                        sharedPreferences.edit().putString("_id", loginResponse._id).apply()
+                        sharedPreferences.edit().putString("username", loginResponse.username).apply()
                         println("Login successful: ${loginResponse.username}")
-                        //println("Login successful: ${loginResponse.user_id}")
+
+                        println("Login successful: ${loginResponse._id}")
                         navController.navigate("home")
+
+
                     } catch (t: Throwable) {
                         println("Login failed: ${t.message}")
                     }

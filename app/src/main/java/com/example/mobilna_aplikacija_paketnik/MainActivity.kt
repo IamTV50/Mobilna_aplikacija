@@ -14,6 +14,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.mobilna_aplikacija_paketnik.API.Box.BoxInterface
 import com.example.mobilna_aplikacija_paketnik.API.Log.LogRequest
 import com.example.mobilna_aplikacija_paketnik.API.Login.LoginInterface
 import com.example.mobilna_aplikacija_paketnik.API.Register.RegisterInterFace
@@ -55,6 +56,7 @@ class MainActivity : ComponentActivity() {
 
         val openInter=retrofitAPI.create(OpenInterface::class.java)
         val logInter=retrofit.create(LogInterface::class.java)
+        val boxInter=retrofit.create(BoxInterface::class.java)
 
           val threshold = 10
         sharedPreferences = getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
@@ -66,7 +68,7 @@ class MainActivity : ComponentActivity() {
         val UID="646f3b6e69a3a1f7b9a12152"
         scope.launch {
 
-                val vibrations = 20
+/*                val vibrations = 20
                 println("Random number: $vibrations")
                 val opend=LocalDate.now()
 
@@ -83,19 +85,19 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
-                delay(1 * 100 * 1) // Delay for 5 minutes
-
+                delay(1 * 50 * 1000) // Delay for 5 minutes
+*/
         }
 
         setContent {
             val navController = rememberNavController()
 
-            NavHost(navController, startDestination = "register") {
+            NavHost(navController, startDestination = "login") {
                 composable("home") {
                     HomeScreen(navController)
                 }
                 composable("camera") {
-                    CameraScreen(navController,openInter)
+                    CameraScreen(navController,openInter,logInter,sharedPreferences,boxInter)
                 }
                 composable("login") {
                     LoginScreen(loginInter,navController = navController,this@MainActivity)
