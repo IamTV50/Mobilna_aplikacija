@@ -54,6 +54,7 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val gmail = remember { mutableStateOf("") }
+    val capturedImages = remember { mutableStateListOf<Bitmap>() }
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current // Access the context here
     Column(modifier = Modifier.padding(16.dp)) {
@@ -75,9 +76,7 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
-        val capturedImages = remember { mutableStateListOf<Bitmap>() }
-
-        val cameraPermissionLauncher: ManagedActivityResultLauncher<String, Boolean> =
+        /*val cameraPermissionLauncher: ManagedActivityResultLauncher<String, Boolean> =
             rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.RequestPermission()
             ) { isGranted: Boolean ->
@@ -87,10 +86,10 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
                     // Permission denied, handle accordingly
                     Log.e("CameraPermission", "Permission denied")
                 }
-            }
+            }*/
 
         val requestCameraPermission: () -> Unit = {
-            cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+            //cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
 
         Button(
@@ -125,7 +124,23 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
     }
 }
 
-private fun openCameraAndCaptureFrames(context: Context, capturedImages: MutableList<Bitmap>) {
+/*override fun onRequestPermissionsResult(
+    requestCode: Int,
+    permissions: Array<String>,
+    grantResults: IntArray
+) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+    if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
+        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            // Permission granted, open camera
+        } else {
+            // Permission denied
+        }
+    }
+}*/
+
+/*private fun openCameraAndCaptureFrames(context: Context, capturedImages: MutableList<Bitmap>) {
     val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
     val cameraId = getCameraId(cameraManager)
     val imageReader = ImageReader.newInstance(imageWidth, imageHeight, ImageFormat.YUV_420_888, MAX_IMAGES)
@@ -148,9 +163,9 @@ private fun openCameraAndCaptureFrames(context: Context, capturedImages: Mutable
             camera.close()
         }
     }, null)
-}
+}*/
 
-private fun createCaptureSession(
+/*private fun createCaptureSession(
     camera: CameraDevice,
     imageReader: ImageReader,
     capturedImages: MutableList<Bitmap>
@@ -173,9 +188,9 @@ private fun createCaptureSession(
             // Failed to configure the capture session
         }
     }, null)
-}
+}*/
 
-private fun getCameraId(cameraManager: CameraManager): String {
+/*private fun getCameraId(cameraManager: CameraManager): String {
     val cameraIdList = cameraManager.cameraIdList
     for (id in cameraIdList) {
         val cameraCharacteristics = cameraManager.getCameraCharacteristics(id)
@@ -185,9 +200,9 @@ private fun getCameraId(cameraManager: CameraManager): String {
         }
     }
     return cameraIdList[0] // Default to the first camera if no back-facing camera is found
-}
+}*/
 
-private fun imageToBitmap(image: Image): Bitmap {
+/*private fun imageToBitmap(image: Image): Bitmap {
     val buffer: ByteBuffer = image.planes[0].buffer
     val bytes = ByteArray(buffer.capacity())
     buffer.get(bytes)
@@ -195,7 +210,9 @@ private fun imageToBitmap(image: Image): Bitmap {
     // Implement your own conversion logic here based on the captured image format
 
     return bitmap
-}
+}*/
+
+private const val CAMERA_PERMISSION_REQUEST_CODE = 200
 private const val imageWidth = 100
 private const val imageHeight = 100
 private const val MAX_IMAGES = 3
