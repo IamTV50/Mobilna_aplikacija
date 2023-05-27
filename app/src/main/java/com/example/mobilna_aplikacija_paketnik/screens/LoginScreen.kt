@@ -1,3 +1,5 @@
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -22,14 +24,18 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.mobilna_aplikacija_paketnik.API.Login.LoginRequest
 import com.example.mobilna_aplikacija_paketnik.API.Login.LoginInterface
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
+import org.bson.types.ObjectId
+
+
 @ExperimentalMaterial3Api
 @Composable
-fun LoginForm(loginInter: LoginInterface, navController: NavHostController) {
+fun LoginForm(loginInter: LoginInterface, navController: NavHostController,context: Context) {
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
-
+    val context =
     Column(modifier = Modifier.padding(16.dp)) {
         Text(text = "Username")
         TextField(
@@ -55,9 +61,19 @@ fun LoginForm(loginInter: LoginInterface, navController: NavHostController) {
                 val loginRequest = LoginRequest(username.value, password.value)
                 coroutineScope.launch {
                     try {
+
                         val loginResponse = loginInter.login(loginRequest)
+                        val gson = Gson()
+                        //val user_id = gson.fromJson(loginResponse.user_id, String::class.java)
+                        val sharedPreferences = context.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
+                        sharedPreferences.edit().putString("_id", loginResponse._id).apply()
+                        sharedPreferences.edit().putString("username", loginResponse.username).apply()
                         println("Login successful: ${loginResponse.username}")
+
+                        println("Login successful: ${loginResponse._id}")
                         navController.navigate("home")
+
+
                     } catch (t: Throwable) {
                         println("Login failed: ${t.message}")
                     }
@@ -69,9 +85,12 @@ fun LoginForm(loginInter: LoginInterface, navController: NavHostController) {
         }
     }
 }
+
+
+
 @ExperimentalMaterial3Api
 @Composable
-fun LoginScreen(loginInter: LoginInterface, navController: NavHostController) {
+fun LoginScreen(loginInter: LoginInterface, navController: NavHostController,Context:Context) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -86,6 +105,6 @@ fun LoginScreen(loginInter: LoginInterface, navController: NavHostController) {
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        LoginForm(loginInter,navController)
+        LoginForm(loginInter,navController,Context)
     }
 }

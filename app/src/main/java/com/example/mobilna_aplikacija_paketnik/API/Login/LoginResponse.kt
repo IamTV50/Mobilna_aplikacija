@@ -7,5 +7,6 @@ import retrofit2.Response
 data class LoginResponse (
     val username : String,
     val password : String,
-    val email : String
+    val email : String,
+    val _id:String
 )
