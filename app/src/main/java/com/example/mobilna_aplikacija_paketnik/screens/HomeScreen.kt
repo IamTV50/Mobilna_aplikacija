@@ -12,7 +12,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,9 +24,10 @@ import androidx.navigation.NavController
 fun HomeScreen(navController: NavController) {
     Scaffold(
         content = {
-            Box(
+            Column(
                 modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(
                     onClick = { navController.navigate("camera") },
@@ -36,6 +36,14 @@ fun HomeScreen(navController: NavController) {
                     contentPadding = PaddingValues(16.dp)
                 ) {
                     Text("Scan QR Code")
+                }
+                Button(
+                    onClick = { navController.navigate("logs") },
+                    modifier = Modifier.padding(16.dp),
+                    shape = CircleShape,
+                    contentPadding = PaddingValues(16.dp)
+                ) {
+                    Text("View Logs")
                 }
             }
         }
