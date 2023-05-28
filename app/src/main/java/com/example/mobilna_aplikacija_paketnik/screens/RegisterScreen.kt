@@ -2,6 +2,7 @@ import android.graphics.Bitmap
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,6 +18,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.mobilna_aplikacija_paketnik.API.Register.RegisterInterFace
@@ -55,7 +58,7 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
         ) { bitmap ->
             capturedPictures.add(bitmap) // Add the captured picture to the list
         }
-        Log.println(Log.INFO, "Message", capturedPictures.toString())
+        
 
         Button(
             onClick = {
@@ -88,6 +91,18 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Register")
+        }
+
+        if (capturedPictures.isNotEmpty()) {
+            val image : Bitmap? = capturedPictures[0]
+            val bitmap: Bitmap? = image as? Bitmap
+            bitmap?.let {
+                val imageBitmap: ImageBitmap = it.asImageBitmap()
+                Image(
+                    bitmap = imageBitmap,
+                    contentDescription = "Slika"
+                )
+            }
         }
     }
 }
