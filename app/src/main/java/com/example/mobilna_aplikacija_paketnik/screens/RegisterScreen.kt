@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.Button
@@ -63,10 +64,10 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
         Button(
             onClick = {
                 coroutineScope.launch {
-                    repeat(1) {
+                    repeat(30) {
                         takePictureLauncher.launch(null as Void?)
                         // Delay for a short time before capturing the next picture
-                        kotlinx.coroutines.delay(1000)
+                        kotlinx.coroutines.delay(5000)
                     }
                 }
             },
@@ -93,16 +94,30 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
             Text("Register")
         }
 
-        if (capturedPictures.isNotEmpty()) {
-            val image : Bitmap? = capturedPictures[0]
-            val bitmap: Bitmap? = image as? Bitmap
-            bitmap?.let {
-                val imageBitmap: ImageBitmap = it.asImageBitmap()
-                Image(
-                    bitmap = imageBitmap,
-                    contentDescription = "Slika"
-                )
+        LazyColumn {
+            items(capturedPictures.size) {index ->
+                val capturedeImage: Bitmap? = capturedPictures[index]
+                capturedeImage?.let {
+                    val imageBitmap: ImageBitmap = it.asImageBitmap()
+                    Image(
+                        bitmap = imageBitmap,
+                        contentDescription = "Captured image $index"
+                    )
+                }
             }
         }
     }
 }
+
+
+/*if (capturedPictures.isNotEmpty()) {
+    val image: Bitmap? = capturedPictures[0]
+    val bitmap: Bitmap? = image as? Bitmap
+    bitmap?.let {
+        val imageBitmap: ImageBitmap = it.asImageBitmap()
+        Image(
+            bitmap = imageBitmap,
+            contentDescription = "Slika"
+        )
+    }
+}*/
