@@ -1,8 +1,11 @@
 package com.example.mobilna_aplikacija_paketnik
 
 import LogInterface
+import LogScreen
 import LoginScreen
 import RegisterScreen
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
@@ -11,6 +14,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -29,6 +34,7 @@ import org.bson.types.ObjectId
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.Date
 import kotlin.random.Random
@@ -37,78 +43,112 @@ import kotlin.random.Random
 @ExperimentalMaterial3Api
 class MainActivity : ComponentActivity() {
     private lateinit var sharedPreferences: SharedPreferences
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
-         val scope = CoroutineScope(Dispatchers.Main)
+        sharedPreferences = getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
+
+        val scope = CoroutineScope(Dispatchers.Main)
         super.onCreate(savedInstanceState)
         val retrofit = Retrofit.Builder()
             .baseUrl("http://192.168.0.44:3001/") // Replace with your API base URL
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-
-        val loginInter = retrofit.create(LoginInterface::class.java)
-        val registerInter  = retrofit.create(RegisterInterFace::class.java)
-        
         val retrofitAPI = Retrofit.Builder()
             .baseUrl("https://api-d4me-stage.direct4.me/sandbox/v1/") // Replace with your API base URL
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        val openInter=retrofitAPI.create(OpenInterface::class.java)
-        val logInter=retrofit.create(LogInterface::class.java)
-        val boxInter=retrofit.create(BoxInterface::class.java)
+        val loginInter = retrofit.create(LoginInterface::class.java)
+        val registerInter = retrofit.create(RegisterInterFace::class.java)
+        val logInter = retrofit.create(LogInterface::class.java)
+        val boxInter = retrofit.create(BoxInterface::class.java)
+        val openInter = retrofitAPI.create(OpenInterface::class.java)
 
-          val threshold = 10
-        sharedPreferences = getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
-
-        // Access the user_id from shared preferences
-        //val userId = sharedPreferences.getString("user_id", "")
-
-        //val UID=ObjectId(userId)
-        val UID="646f3b6e69a3a1f7b9a12152"
+        val UID = "646f3b6e69a3a1f7b9a12152"
+        val threshold = 10
         scope.launch {
-
-/*                val vibrations = 20
+            while (true) {
+                val vibrations = Random.nextInt(1,11)
                 println("Random number: $vibrations")
-                val opend=LocalDate.now()
+                val opend = LocalDateTime.now()
 
                 if (vibrations > threshold) {
-                    //val loginRequest = LoginRequest("username", "password") // Replace with your actual login credentials
-                    val logRequest=LogRequest("dolfa", Date.from(opend.atStartOfDay(ZoneId.systemDefault()).toInstant()),Random.nextInt(1,999),true)
+                    val logRequest = LogRequest(
+                        "dolfa",
+                        Date.from(opend.atZone(ZoneId.systemDefault()).toInstant()),
+                        Random.nextInt(1, 999),
+                        true
+                    )
                     try {
                         val logResponse = logInter.sendLog(logRequest, UID)
 
-
                         println("POST request successful")
+                        createPushNotification(context = this@MainActivity)
                     } catch (e: Exception) {
                         println("POST request failed: ${e.message} ")
                     }
                 }
-
                 delay(1 * 50 * 1000) // Delay for 5 minutes
-*/
-        }
-
-        setContent {
-            val navController = rememberNavController()
-
-            NavHost(navController, startDestination = "register") {
-                composable("home") {
-                    HomeScreen(navController)
-                }
-                composable("camera") {
-                    CameraScreen(navController,openInter,logInter,sharedPreferences,boxInter)
-                }
-                composable("login") {
-                    LoginScreen(loginInter,navController = navController,this@MainActivity)
-                }
-                composable("register"){
-                    RegisterScreen(registerInter,navController)
-                }
             }
         }
 
+
+            setContent {
+                val navController = rememberNavController()
+
+                NavHost(navController, startDestination = "login") {
+                    composable("home") {
+                        HomeScreen(navController)
+                    }
+                    composable("camera") {
+                        CameraScreen(
+                            navController,
+                            openInter,
+                            logInter,
+                            sharedPreferences,
+                            boxInter
+                        )
+                    }
+                    composable("login") {
+                        LoginScreen(loginInter, navController = navController, this@MainActivity)
+                    }
+                    composable("register") {
+                        RegisterScreen(registerInter, navController)
+                    }
+                    composable("logs") {
+                        LogScreen(navController, logInter, sharedPreferences)
+                    }
+                }
+            }
+
+
     }
 
+    fun createPushNotification(context: Context) {
+        val channelId = "my_channel_id"
+        val notificationId = 1
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                channelId,
+                "My Channel",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            val notificationManager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        val builder = NotificationCompat.Builder(context, channelId)
+            .setSmallIcon(androidx.core.R.drawable.notification_bg)
+            .setContentTitle("Warning!")
+            .setContentText("Someone tried to force the parcel")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setAutoCancel(true)
+
+        with(NotificationManagerCompat.from(context)) {
+            notify(notificationId, builder.build())
+        }
+    }
 }

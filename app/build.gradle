@@ -73,6 +73,8 @@ dependencies {
     androidTestImplementation platform('androidx.compose:compose-bom:2022.10.00')
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
+    implementation 'androidx.compose.material:material-icons-core:1.0.5' // check for the latest version
+    implementation 'androidx.compose.material:material-icons-extended:1.0.5' // check for the latest version
     //zxing
     implementation 'com.journeyapps:zxing-android-embedded:4.2.0'
     implementation 'com.google.zxing:core:3.4.1'
