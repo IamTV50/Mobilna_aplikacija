@@ -67,32 +67,41 @@ class MainActivity : ComponentActivity() {
 
         val UID = "646f3b6e69a3a1f7b9a12152"
         val threshold = 10
-        scope.launch {
-            while (true) {
-                val vibrations = Random.nextInt(1,11)
-                println("Random number: $vibrations")
-                val opend = LocalDateTime.now()
+        val userIds = listOf("dolfa", "fico", "leo", "test", "user5")
+        val random = Random(System.currentTimeMillis())
 
-                if (vibrations > threshold) {
+        scope.launch {
+            fun getRandomUser(): String {
+                val randomIndex = random.nextInt(userIds.size)
+                return userIds[randomIndex]
+            }
+
+            while (true) {
+                val vibrations = random.nextInt(1, 11)
+                println("Random number: $vibrations")
+
+                if (vibrations > threshold && random.nextDouble() < 0.1) {
+                    // The vibrations number is higher than the threshold and the random chance condition is met
+                    val opend = LocalDateTime.now()
                     val logRequest = LogRequest(
-                        "dolfa",
+                        getRandomUser(),
                         Date.from(opend.atZone(ZoneId.systemDefault()).toInstant()),
                         Random.nextInt(1, 999),
                         true
                     )
                     try {
                         val logResponse = logInter.sendLog(logRequest, UID)
-
                         println("POST request successful")
                         createPushNotification(context = this@MainActivity)
                     } catch (e: Exception) {
                         println("POST request failed: ${e.message} ")
                     }
                 }
-                delay(1 * 50 * 1000) // Delay for 5 minutes
+
+                // Delay for 5 minutes
+                delay(1 * 60 * 1000)
             }
         }
-
 
             setContent {
                 val navController = rememberNavController()
