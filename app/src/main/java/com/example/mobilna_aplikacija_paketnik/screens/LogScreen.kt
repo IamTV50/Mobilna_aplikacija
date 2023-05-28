@@ -28,7 +28,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Security
+//import androidx.compose.material.icons.filled.Security
 
 @RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalMaterial3Api
@@ -97,7 +97,7 @@ fun LogScreen(
                         Divider(modifier = Modifier.padding(vertical = 8.dp))
 
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(Icons.Default.Security, contentDescription = null)
+                            //Icon(Icons.Default.Security, contentDescription = null)
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(text = "Force: ${log.force}", style = MaterialTheme.typography.bodySmall)
                         }
