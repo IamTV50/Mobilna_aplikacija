@@ -26,6 +26,7 @@ import androidx.navigation.NavController
 import com.example.mobilna_aplikacija_paketnik.API.Register.RegisterInterFace
 import com.example.mobilna_aplikacija_paketnik.API.Register.RegisterRequest
 import kotlinx.coroutines.launch
+import java.io.ByteArrayOutputStream
 
 @Composable
 fun RegisterScreen(registerInter: RegisterInterFace, navController: NavController) {
@@ -59,12 +60,11 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
         ) { bitmap ->
             capturedPictures.add(bitmap) // Add the captured picture to the list
         }
-        
 
         Button(
             onClick = {
                 coroutineScope.launch {
-                    repeat(30) {
+                    repeat(1) {
                         takePictureLauncher.launch(null as Void?)
                         // Delay for a short time before capturing the next picture
                         kotlinx.coroutines.delay(5000)
@@ -78,7 +78,13 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
 
         Button(
             onClick = {
-                val registerRequest = RegisterRequest(username.value, gmail.value, password.value)
+                val registerRequest = RegisterRequest(username.value, gmail.value, password.value, capturedPictures.map { bitmap ->
+                    bitmap.let {
+                        val stream = ByteArrayOutputStream()
+                        it?.compress(Bitmap.CompressFormat.PNG, 100, stream)
+                        stream.toByteArray()
+                    }
+                })
                 coroutineScope.launch {
                     try {
                         val registerResponse = registerInter.register(registerRequest)
@@ -95,9 +101,9 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
         }
 
         LazyColumn {
-            items(capturedPictures.size) {index ->
-                val capturedeImage: Bitmap? = capturedPictures[index]
-                capturedeImage?.let {
+            items(capturedPictures.size) { index ->
+                val capturedImage: Bitmap? = capturedPictures[index]
+                capturedImage?.let {
                     val imageBitmap: ImageBitmap = it.asImageBitmap()
                     Image(
                         bitmap = imageBitmap,
@@ -108,16 +114,3 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
         }
     }
 }
-
-
-/*if (capturedPictures.isNotEmpty()) {
-    val image: Bitmap? = capturedPictures[0]
-    val bitmap: Bitmap? = image as? Bitmap
-    bitmap?.let {
-        val imageBitmap: ImageBitmap = it.asImageBitmap()
-        Image(
-            bitmap = imageBitmap,
-            contentDescription = "Slika"
-        )
-    }
-}*/
