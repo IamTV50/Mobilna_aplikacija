@@ -18,22 +18,20 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.FileProvider
 import androidx.navigation.NavController
-import com.example.mobilna_aplikacija_paketnik.API.Register.RegisterRequest
 import com.example.mobilna_aplikacija_paketnik.API.Register.RegisterResponse
 import kotlinx.coroutines.launch
-import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.OkHttpClient
-import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+
 import java.io.ByteArrayOutputStream
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.FileProvider
 import java.io.File
 
 fun Bitmap.toByteArray(): ByteArray {
@@ -41,9 +39,7 @@ fun Bitmap.toByteArray(): ByteArray {
     this.compress(Bitmap.CompressFormat.PNG, 100, stream)
     return stream.toByteArray()
 }
-fun ByteArray.toRequestBody(contentType: String): RequestBody {
-    return this.toRequestBody(contentType.toMediaType().toString())
-}
+
 @Composable
 fun RegisterScreen(registerInter: RegisterInterFace, navController: NavController) {
     val username = remember { mutableStateOf("") }
@@ -110,30 +106,20 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
 
         Button(
             onClick = {
-                val requestBodyBuilder = MultipartBody.Builder().setType(MultipartBody.FORM)
-                    .addFormDataPart("username", username.value)
-                    .addFormDataPart("password", password.value)
-                    .addFormDataPart("email", email.value)
-
-                capturedPictures.forEachIndexed { index, bitmap ->
+                val parts = capturedPictures.mapIndexedNotNull { index, bitmap ->
                     bitmap?.let {
-                        val stream = ByteArrayOutputStream()
-                        it.compress(Bitmap.CompressFormat.PNG, 100, stream)
-                        val byteArray = stream.toByteArray()
-                        val requestBody = byteArray.toRequestBody("image/png")
-                        requestBodyBuilder.addFormDataPart(
-                            "image_$index",
-                            "image_$index.png",
-                            requestBody
-                        )
+                        val byteArray = it.toByteArray()
+                        val requestBody = byteArray.toRequestBody("image/png".toMediaTypeOrNull())
+                        MultipartBody.Part.createFormData("image_$index", "image_$index.png", requestBody)
                     }
                 }
+
                 coroutineScope.launch {
                     try {
-                        //val res = RegisterInterFace.
-                        if (res.isSuccessful) {
+                        val response: Response<RegisterResponse> = registerInter.register(parts)
+                        if (response.isSuccessful) {
                             // Handle successful response
-                            val responseBody = res.body()
+                            val responseBody = response.body()
                             println("Register successful: $responseBody")
                             navController.navigate("home")
                         } else {
@@ -149,8 +135,9 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Register")
+            Text("Submit")
         }
+
 
         LazyColumn {
             items(capturedPictures.size) { index ->
