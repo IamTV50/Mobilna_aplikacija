@@ -3,6 +3,7 @@ package com.example.mobilna_aplikacija_paketnik
 import LogInterface
 import LogScreen
 import LoginScreen
+import RegisterInterFace
 import RegisterScreen
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -22,7 +23,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.mobilna_aplikacija_paketnik.API.Box.BoxInterface
 import com.example.mobilna_aplikacija_paketnik.API.Log.LogRequest
 import com.example.mobilna_aplikacija_paketnik.API.Login.LoginInterface
-import com.example.mobilna_aplikacija_paketnik.API.Register.RegisterInterFace
 import com.example.mobilna_aplikacija_paketnik.API.OpenBox.OpenInterface
 import com.example.mobilna_aplikacija_paketnik.screens.CameraScreen
 import com.example.mobilna_aplikacija_paketnik.screens.HomeScreen
@@ -38,8 +38,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.Date
 import kotlin.random.Random
-//const val objectIdString = "646f5cd475cc0d88d20dcfce";
-//val objectId = ObjectId(objectIdString);
+
 @ExperimentalMaterial3Api
 class MainActivity : ComponentActivity() {
     private lateinit var sharedPreferences: SharedPreferences
