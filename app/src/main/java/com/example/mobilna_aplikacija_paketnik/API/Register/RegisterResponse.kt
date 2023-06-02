@@ -4,5 +4,5 @@ data class RegisterResponse(
     val username: String,
     val password: String,
     val email: String,
-    val images: List<ByteArray>
+    val images: List<String>
 )
