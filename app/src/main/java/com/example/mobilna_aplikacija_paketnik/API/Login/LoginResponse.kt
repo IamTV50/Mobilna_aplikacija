@@ -8,5 +8,7 @@ data class LoginResponse (
     val username : String,
     val password : String,
     val email : String,
-    val _id:String
+    val _id:String,
+    var userGood:Boolean,
+    val images : List<ByteArray>
 )

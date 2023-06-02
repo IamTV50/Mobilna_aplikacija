@@ -21,6 +21,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.mobilna_aplikacija_paketnik.API.Box.BoxInterface
+import com.example.mobilna_aplikacija_paketnik.API.FaceLogin.FaceLoginInterface
 import com.example.mobilna_aplikacija_paketnik.API.Log.LogRequest
 import com.example.mobilna_aplikacija_paketnik.API.Login.LoginInterface
 import com.example.mobilna_aplikacija_paketnik.API.OpenBox.OpenInterface
@@ -50,7 +51,7 @@ class MainActivity : ComponentActivity() {
         val scope = CoroutineScope(Dispatchers.Main)
         super.onCreate(savedInstanceState)
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:3001/") // Replace with your API base URL
+            .baseUrl("http://192.168.0.44:3001/") // Replace with your API base URL
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val retrofitAPI = Retrofit.Builder()
@@ -63,6 +64,7 @@ class MainActivity : ComponentActivity() {
         val logInter = retrofit.create(LogInterface::class.java)
         val boxInter = retrofit.create(BoxInterface::class.java)
         val openInter = retrofitAPI.create(OpenInterface::class.java)
+        val faceLogInter = retrofit.create(FaceLoginInterface::class.java)
 
         val UID = "646f3b6e69a3a1f7b9a12152"
         val threshold = 10
@@ -105,7 +107,7 @@ class MainActivity : ComponentActivity() {
             setContent {
                 val navController = rememberNavController()
 
-                NavHost(navController, startDestination = "register") {
+                NavHost(navController, startDestination = "login") {
                     composable("home") {
                         HomeScreen(navController)
                     }
@@ -119,7 +121,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable("login") {
-                        LoginScreen(loginInter, navController = navController, this@MainActivity)
+                        LoginScreen(loginInter, navController = navController, faceLogInter)
                     }
                     composable("register") {
                         RegisterScreen(registerInter, navController)
