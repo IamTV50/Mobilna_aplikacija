@@ -106,5 +106,7 @@ dependencies {
     //Bson
     implementation 'org.mongodb:bson:4.3.3'
 
+    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
+
 
 }
