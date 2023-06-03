@@ -11,5 +11,5 @@ import retrofit2.http.Part
 interface FaceLoginInterface {
     @Multipart
     @POST("users/loginFace")
-    suspend fun loginFace(@Part parts: List<MultipartBody.Part>): Response<FaceLoginResponse>
+    suspend fun loginFace(@Part images: List<MultipartBody.Part>): Response<FaceLoginResponse>
 }
