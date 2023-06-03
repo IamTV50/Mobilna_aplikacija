@@ -7,6 +7,7 @@ import retrofit2.http.Body
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Path
 
 interface RegisterInterFace {
     @POST("/users")
@@ -15,9 +16,12 @@ interface RegisterInterFace {
     ): Response<RegisterResponse>
 
     @Multipart
-    @POST("/users/register")
+    @POST("/users/register/{username}")
     suspend fun uploadImages(
+        @Path("username") username: String,
         @Part images: List<MultipartBody.Part>
     ): Response<RegisterResponse>
+
+
 }
 
