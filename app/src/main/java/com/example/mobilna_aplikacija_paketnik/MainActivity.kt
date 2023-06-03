@@ -126,7 +126,7 @@ class MainActivity : ComponentActivity() {
                         LoginScreen(loginInter, navController = navController, faceLogInter)
                     }
                     composable("register") {
-                        RegisterScreen(registerInter, navController)
+                        RegisterScreen(registerInter, navController,sharedPreferences )
                     }
                     composable("logs") {
                         LogScreen(navController, logInter, sharedPreferences)

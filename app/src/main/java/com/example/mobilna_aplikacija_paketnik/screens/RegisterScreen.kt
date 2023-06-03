@@ -1,5 +1,6 @@
 import android.Manifest
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -10,7 +11,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -60,12 +60,13 @@ fun Bitmap.toByteArray(): ByteArray {
 }
 
 @Composable
-fun RegisterScreen(registerInter: RegisterInterFace, navController: NavController) {
+fun RegisterScreen(registerInter: RegisterInterFace, navController: NavController, sharedPreferences: SharedPreferences) {
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val email = remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
     val capturedPictures = remember { mutableStateListOf<Bitmap?>() } // List to store the captured pictures
+    val picturesTaken = remember { mutableStateOf(0) }
 
     val context = LocalContext.current
     val permission = Manifest.permission.CAMERA
@@ -74,12 +75,8 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
     ) { isGranted ->
         if (isGranted) {
             // Permission granted, you can open the camera
-        } else {
-            // Permission denied, handle accordingly
         }
     }
-
-
 
     Column(modifier = Modifier.padding(16.dp)) {
         TextField(
@@ -108,16 +105,19 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
             if (success) {
                 tempImageFile.value?.let { file ->
                     val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-                    capturedPictures.add(bitmap)
+                    if (bitmap != null) {
+                        capturedPictures.add(bitmap)
+                        picturesTaken.value += 1
+                    }
                 }
             }
         }
 
         Button(
             onClick = {
-                checkAndRequestCameraPermission(context, permission, launcher)
-                coroutineScope.launch {
-                    repeat(5) {
+                if (picturesTaken.value < 2) {
+                    checkAndRequestCameraPermission(context, permission, launcher)
+                    coroutineScope.launch {
                         val imageFile = File(context.cacheDir, "temp_image_${System.currentTimeMillis()}.jpg")
                         tempImageFile.value = imageFile
                         val imageUri = FileProvider.getUriForFile(
@@ -126,22 +126,26 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
                             imageFile
                         )
                         takePictureLauncher.launch(imageUri)
-                        kotlinx.coroutines.delay(5000)
                     }
+                } else {
+                    // Show a message or disable the button when 2 pictures are already taken
                 }
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            enabled = picturesTaken.value < 2 // Enable the button if picturesTaken is less than 2
         ) {
             Text("Capture Pictures")
         }
 
         Button(
             onClick = {
-
                 coroutineScope.launch {
                     try {
+                        // Retrieve the username from the input field
+                        val usernameValue = username.value
+
                         // Call the register function with the user data
-                        val requestBody = RegisterUser(username.value, password.value, email.value)
+                        val requestBody = RegisterUser(usernameValue, password.value, email.value)
                         val response: Response<RegisterResponse> = registerInter.register(requestBody)
 
                         if (response.isSuccessful) {
@@ -149,27 +153,31 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
                             val responseBody = response.body()
                             println("Register successful: $responseBody")
 
-                            // Upload images
-                            val parts = capturedPictures.mapIndexedNotNull { index, bitmap ->
-                                bitmap?.let {
-                                    val byteArray = it.toByteArray()
-                                    val requestBody = byteArray.toRequestBody("image/png".toMediaTypeOrNull())
-                                    MultipartBody.Part.createFormData("images", "image_$index.png", requestBody)
+                            if (capturedPictures.isNotEmpty()) {
+                                // Upload images
+                                val parts = capturedPictures.mapIndexedNotNull { index, bitmap ->
+                                    bitmap?.let {
+                                        val byteArray = it.toByteArray()
+                                        val requestBody = byteArray.toRequestBody("image/png".toMediaTypeOrNull())
+                                        val fileName = "image_$index.png"
+                                        println("Image $fileName: ${byteArray.size} bytes")
+                                        MultipartBody.Part.createFormData("images", fileName, requestBody)
+                                    }
+                                }
+
+                                // Pass the username and images to the uploadImages function
+                                val uploadResponse: Response<RegisterResponse> = registerInter.uploadImages(usernameValue, parts)
+
+                                if (uploadResponse.isSuccessful) {
+                                    // Handle successful image upload
+                                    println("Image upload successful")
+                                } else {
+                                    // Handle unsuccessful image upload
+                                    println("Image upload failed")
                                 }
                             }
 
-                            val uploadResponse: Response<RegisterResponse> = registerInter.uploadImages(parts)
-
-                            if (uploadResponse.isSuccessful) {
-                                // Handle successful image upload
-                                println("Image upload successful")
-                            } else {
-                                // Handle unsuccessful image upload
-                                println("Image upload failed")
-                            }
-
                             navController.navigate("home")
-
                         } else {
                             // Handle unsuccessful response
                             println("Register failed")
@@ -180,7 +188,8 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
                     }
                 }
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            enabled = picturesTaken.value == 2 // Enable the button if picturesTaken is exactly 2
         ) {
             Text("Submit")
         }
