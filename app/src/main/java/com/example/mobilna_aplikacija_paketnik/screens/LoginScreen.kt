@@ -126,8 +126,9 @@ fun LoginForm(loginInter: LoginInterface, navController: NavHostController, face
                     bitmap?.let {
                         val byteArray = it.toByteArray1()
                         val requestBody = byteArray.toRequestBody("image/png".toMediaTypeOrNull())
-                        MultipartBody.Part.createFormData("image_$index", "image_$index.png", requestBody)
+                        MultipartBody.Part.createFormData("images", "image_$index.png", requestBody)
                     }
+
                 }
 
                 // Inside the Button onClick block for login
