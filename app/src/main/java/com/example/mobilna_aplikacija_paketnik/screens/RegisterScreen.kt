@@ -55,7 +55,7 @@ fun checkAndRequestCameraPermission(
 
 fun Bitmap.toByteArray(): ByteArray {
     val stream = ByteArrayOutputStream()
-    this.compress(Bitmap.CompressFormat.PNG, 100, stream)
+    this.compress(Bitmap.CompressFormat.JPEG, 100, stream)
     return stream.toByteArray()
 }
 
@@ -118,7 +118,7 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
                 if (picturesTaken.value < 2) {
                     checkAndRequestCameraPermission(context, permission, launcher)
                     coroutineScope.launch {
-                        val imageFile = File(context.cacheDir, "temp_image_${System.currentTimeMillis()}.jpg")
+                        val imageFile = File(context.cacheDir, "temp_image_${System.currentTimeMillis()}.jpeg")
                         tempImageFile.value = imageFile
                         val imageUri = FileProvider.getUriForFile(
                             context,
@@ -159,7 +159,7 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
                                     bitmap?.let {
                                         val byteArray = it.toByteArray()
                                         val requestBody = byteArray.toRequestBody("image/png".toMediaTypeOrNull())
-                                        val fileName = "image_$index.png"
+                                        val fileName = "image_$index.jpeg"
                                         println("Image $fileName: ${byteArray.size} bytes")
                                         MultipartBody.Part.createFormData("images", fileName, requestBody)
                                     }
