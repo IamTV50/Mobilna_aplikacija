@@ -18,6 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
+
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,6 +41,14 @@ fun HomeScreen(navController: NavController) {
                 }
                 Button(
                     onClick = { navController.navigate("logs") },
+                    modifier = Modifier.padding(16.dp),
+                    shape = CircleShape,
+                    contentPadding = PaddingValues(16.dp)
+                ) {
+                    Text("View Logs")
+                }
+                Button(
+                    onClick = { navController.navigate("register") },
                     modifier = Modifier.padding(16.dp),
                     shape = CircleShape,
                     contentPadding = PaddingValues(16.dp)

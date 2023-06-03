@@ -1,5 +1,9 @@
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -20,9 +24,11 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.navigation.NavController
 import com.example.mobilna_aplikacija_paketnik.API.Register.RegisterResponse
+import com.example.mobilna_aplikacija_paketnik.API.Register.RegisterUser
 import kotlinx.coroutines.launch
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -30,9 +36,22 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Response
-
 import java.io.ByteArrayOutputStream
 import java.io.File
+
+fun checkAndRequestCameraPermission(
+    context: Context,
+    permission: String,
+    launcher: ManagedActivityResultLauncher<String, Boolean>
+) {
+    val permissionCheckResult = ContextCompat.checkSelfPermission(context, permission)
+    if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
+        // Open camera because permission is already granted
+    } else {
+        // Request permission
+        launcher.launch(permission)
+    }
+}
 
 fun Bitmap.toByteArray(): ByteArray {
     val stream = ByteArrayOutputStream()
@@ -47,6 +66,20 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
     val email = remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
     val capturedPictures = remember { mutableStateListOf<Bitmap?>() } // List to store the captured pictures
+
+    val context = LocalContext.current
+    val permission = Manifest.permission.CAMERA
+    val launcher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            // Permission granted, you can open the camera
+        } else {
+            // Permission denied, handle accordingly
+        }
+    }
+
+
 
     Column(modifier = Modifier.padding(16.dp)) {
         TextField(
@@ -67,7 +100,6 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
-        val context = LocalContext.current
         val tempImageFile = remember { mutableStateOf<File?>(null) }
 
         val takePictureLauncher = rememberLauncherForActivityResult(
@@ -81,11 +113,11 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
             }
         }
 
-
         Button(
             onClick = {
+                checkAndRequestCameraPermission(context, permission, launcher)
                 coroutineScope.launch {
-                    repeat(2) {
+                    repeat(5) {
                         val imageFile = File(context.cacheDir, "temp_image_${System.currentTimeMillis()}.jpg")
                         tempImageFile.value = imageFile
                         val imageUri = FileProvider.getUriForFile(
@@ -103,25 +135,41 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
             Text("Capture Pictures")
         }
 
-
         Button(
             onClick = {
-                val parts = capturedPictures.mapIndexedNotNull { index, bitmap ->
-                    bitmap?.let {
-                        val byteArray = it.toByteArray()
-                        val requestBody = byteArray.toRequestBody("image/png".toMediaTypeOrNull())
-                        MultipartBody.Part.createFormData("image_$index", "image_$index.png", requestBody)
-                    }
-                }
 
                 coroutineScope.launch {
                     try {
-                        val response: Response<RegisterResponse> = registerInter.register(parts)
+                        // Call the register function with the user data
+                        val requestBody = RegisterUser(username.value, password.value, email.value)
+                        val response: Response<RegisterResponse> = registerInter.register(requestBody)
+
                         if (response.isSuccessful) {
                             // Handle successful response
                             val responseBody = response.body()
                             println("Register successful: $responseBody")
+
+                            // Upload images
+                            val parts = capturedPictures.mapIndexedNotNull { index, bitmap ->
+                                bitmap?.let {
+                                    val byteArray = it.toByteArray()
+                                    val requestBody = byteArray.toRequestBody("image/png".toMediaTypeOrNull())
+                                    MultipartBody.Part.createFormData("images", "image_$index.png", requestBody)
+                                }
+                            }
+
+                            val uploadResponse: Response<RegisterResponse> = registerInter.uploadImages(parts)
+
+                            if (uploadResponse.isSuccessful) {
+                                // Handle successful image upload
+                                println("Image upload successful")
+                            } else {
+                                // Handle unsuccessful image upload
+                                println("Image upload failed")
+                            }
+
                             navController.navigate("home")
+
                         } else {
                             // Handle unsuccessful response
                             println("Register failed")
@@ -131,25 +179,10 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
                         println("Register failed: ${e.message}")
                     }
                 }
-
             },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Submit")
-        }
-
-
-        LazyColumn {
-            items(capturedPictures.size) { index ->
-                val capturedImage: Bitmap? = capturedPictures[index]
-                capturedImage?.let {
-                    val imageBitmap: ImageBitmap = it.asImageBitmap()
-                    Image(
-                        bitmap = imageBitmap,
-                        contentDescription = "Captured image $index"
-                    )
-                }
-            }
         }
     }
 }
