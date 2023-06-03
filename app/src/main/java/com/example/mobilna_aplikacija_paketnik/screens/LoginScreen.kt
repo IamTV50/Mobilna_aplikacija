@@ -48,7 +48,7 @@ import java.io.File
 
 fun Bitmap.toByteArray1(): ByteArray {
     val stream = ByteArrayOutputStream()
-    this.compress(Bitmap.CompressFormat.PNG, 100, stream)
+    this.compress(Bitmap.CompressFormat.PNG, 90, stream)
     return stream.toByteArray()
 }
 
@@ -89,6 +89,7 @@ fun LoginForm(loginInter: LoginInterface, navController: NavHostController, face
                 tempImageFile.value?.let { file ->
                     val bitmap = BitmapFactory.decodeFile(file.absolutePath)
                     capturedPictures.add(bitmap)
+                    println("Zajete slike ${capturedPictures.size}")
                 }
             }
         }
@@ -122,6 +123,7 @@ fun LoginForm(loginInter: LoginInterface, navController: NavHostController, face
         Button(
             onClick = {
                 val loginRequest = LoginRequest(username.value, password.value)
+
                 val parts = capturedPictures.mapIndexedNotNull { index, bitmap ->
                     bitmap?.let {
                         val byteArray = it.toByteArray1()
@@ -155,7 +157,6 @@ fun LoginForm(loginInter: LoginInterface, navController: NavHostController, face
                         sharedPreferences.edit().putString("username", loginResponse.username).apply()
                         println("Login successful: ${loginResponse.username}")
                         println("Login successful: ${loginResponse._id}")
-                        println("Face id goes through to backend")
 
                         navController.navigate("home")
                     } catch (t: Throwable) {
