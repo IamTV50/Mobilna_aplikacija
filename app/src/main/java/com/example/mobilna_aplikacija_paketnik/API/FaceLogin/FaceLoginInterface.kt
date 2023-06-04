@@ -7,9 +7,12 @@ import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Path
 
 interface FaceLoginInterface {
     @Multipart
-    @POST("users/loginFace")
-    suspend fun loginFace(@Part images: List<MultipartBody.Part>): Response<FaceLoginResponse>
+    @POST("users/loginFace/{username}")
+    suspend fun loginFace(
+        @Path("username") username: String,
+        @Part images: List<MultipartBody.Part>): Response<FaceLoginResponse>
 }

@@ -139,7 +139,7 @@ fun LoginForm(loginInter: LoginInterface, navController: NavHostController, face
                         val loginResponse = withContext(Dispatchers.IO) { loginInter.login(loginRequest) }
 
                         val faceLoginresponse: Response<FaceLoginResponse> = withContext(Dispatchers.IO) {
-                            faceLogInter.loginFace(parts)
+                            faceLogInter.loginFace(username.value,parts)
                         }
 
                         if (faceLoginresponse.isSuccessful) {
