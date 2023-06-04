@@ -48,7 +48,7 @@ import java.io.File
 
 fun Bitmap.toByteArray1(): ByteArray {
     val stream = ByteArrayOutputStream()
-    this.compress(Bitmap.CompressFormat.PNG, 90, stream)
+    this.compress(Bitmap.CompressFormat.JPEG, 100, stream)
     return stream.toByteArray()
 }
 
@@ -128,7 +128,7 @@ fun LoginForm(loginInter: LoginInterface, navController: NavHostController, face
                     bitmap?.let {
                         val byteArray = it.toByteArray1()
                         val requestBody = byteArray.toRequestBody("image/png".toMediaTypeOrNull())
-                        MultipartBody.Part.createFormData("images", "image_$index.png", requestBody)
+                        MultipartBody.Part.createFormData("images", "image_$index.jpeg", requestBody)
                     }
 
                 }
