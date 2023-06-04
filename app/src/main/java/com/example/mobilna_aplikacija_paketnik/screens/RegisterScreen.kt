@@ -115,7 +115,7 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
 
         Button(
             onClick = {
-                if (picturesTaken.value < 2) {
+                if (picturesTaken.value < 5) {
                     checkAndRequestCameraPermission(context, permission, launcher)
                     coroutineScope.launch {
                         val imageFile = File(context.cacheDir, "temp_image_${System.currentTimeMillis()}.jpeg")
@@ -132,7 +132,7 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
                 }
             },
             modifier = Modifier.fillMaxWidth(),
-            enabled = picturesTaken.value < 2 // Enable the button if picturesTaken is less than 2
+            enabled = picturesTaken.value < 5 // Enable the button if picturesTaken is less than 5
         ) {
             Text("Capture Pictures")
         }
@@ -189,7 +189,7 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
                 }
             },
             modifier = Modifier.fillMaxWidth(),
-            enabled = picturesTaken.value == 2 // Enable the button if picturesTaken is exactly 2
+            enabled = picturesTaken.value == 5 // Enable the button if picturesTaken is exactly 5
         ) {
             Text("Submit")
         }

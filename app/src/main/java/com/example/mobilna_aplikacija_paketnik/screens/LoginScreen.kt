@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
 import androidx.navigation.NavHostController
-import com.example.mobilna_aplikacija_paketnik.API.FaceLogin.FaceLoginInterface
 import com.example.mobilna_aplikacija_paketnik.API.FaceLogin.FaceLoginRequest
 import com.example.mobilna_aplikacija_paketnik.API.FaceLogin.FaceLoginResponse
 import com.example.mobilna_aplikacija_paketnik.API.Login.LoginRequest
@@ -46,12 +45,6 @@ import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.io.File
 
-fun Bitmap.toByteArray1(): ByteArray {
-    val stream = ByteArrayOutputStream()
-    this.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-    return stream.toByteArray()
-}
-
 @OptIn(ExperimentalUnsignedTypes::class)
 @ExperimentalMaterial3Api
 @Composable
@@ -60,6 +53,8 @@ fun LoginForm(loginInter: LoginInterface, navController: NavHostController, face
     val password = remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
     val capturedPictures = remember { mutableStateListOf<Bitmap?>() } // List to store the captured pictures
+
+    val context = LocalContext.current // Access the current context
 
     Column(modifier = Modifier.padding(16.dp)) {
         Text(text = "Username")
@@ -79,97 +74,26 @@ fun LoginForm(loginInter: LoginInterface, navController: NavHostController, face
             visualTransformation = PasswordVisualTransformation()
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
-        val tempImageFile = remember { mutableStateOf<File?>(null) }
-        val context = LocalContext.current
-        val takePictureLauncher = rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.TakePicture()
-        ) { success ->
-            if (success) {
-                tempImageFile.value?.let { file ->
-                    val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-                    capturedPictures.add(bitmap)
-                    println("Zajete slike ${capturedPictures.size}")
-                }
-            }
-        }
-
-        Button(
-            onClick = {
-                coroutineScope.launch {
-                    repeat(3) {
-                        withContext(Dispatchers.IO) {
-                            val imageFile = File(
-                                context.cacheDir,
-                                "temp_image_${System.currentTimeMillis()}.jpg"
-                            )
-                            tempImageFile.value = imageFile
-                            val imageUri = FileProvider.getUriForFile(
-                                context,
-                                context.packageName + ".fileprovider",
-                                imageFile
-                            )
-                            takePictureLauncher.launch(imageUri)
-                        }
-                        kotlinx.coroutines.delay(5000)
-                    }
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Capture Picture")
-        }
-
         Button(
             onClick = {
                 val loginRequest = LoginRequest(username.value, password.value)
-
-                val parts = capturedPictures.mapIndexedNotNull { index, bitmap ->
-                    bitmap?.let {
-                        val byteArray = it.toByteArray1()
-                        val requestBody = byteArray.toRequestBody("image/png".toMediaTypeOrNull())
-                        MultipartBody.Part.createFormData("images", "image_$index.jpeg", requestBody)
-                    }
-
-                }
 
                 // Inside the Button onClick block for login
                 coroutineScope.launch {
                     try {
                         val loginResponse = withContext(Dispatchers.IO) { loginInter.login(loginRequest) }
 
-                        val faceLoginresponse: Response<FaceLoginResponse> = withContext(Dispatchers.IO) {
-                            faceLogInter.loginFace(username.value,parts)
-                        }
 
-                        if (faceLoginresponse.isSuccessful) {
-                            val responseBody = faceLoginresponse.body()
-                            println("Face login successful: $responseBody")
-                            navController.navigate("home")
-                        } else {
-                            println("Face login failed")
-                        }
-                        val gson = Gson()
-                        val sharedPreferences = withContext(Dispatchers.IO) {
-                            context.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
-                        }
-                        sharedPreferences.edit().putString("_id", loginResponse._id).apply()
-                        sharedPreferences.edit().putString("username", loginResponse.username).apply()
+                        val sharedPreferences = context.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
+                        sharedPreferences.edit().putString("username", loginRequest.username).apply()
                         println("Login successful: ${loginResponse.username}")
                         println("Login successful: ${loginResponse._id}")
 
-                        navController.navigate("home")
+                        navController.navigate("face")
                     } catch (t: Throwable) {
                         println("Login failed: ${t.message}")
-                        /*capturedPictures.forEachIndexed { index, bitmap ->
-                            val sizeInBytes = bitmap?.byteCount ?: 0
-                            val sizeInKb = sizeInBytes / 1024.0
-                            val sizeInMb = sizeInBytes / (1024.0 * 1024.0)
-                            println("Captured image $index size: $sizeInBytes bytes ($sizeInKb KB, $sizeInMb MB)")
-                        }*/
                     }
                 }
-
             },
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -177,8 +101,6 @@ fun LoginForm(loginInter: LoginInterface, navController: NavHostController, face
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-
-
     }
 }
 
