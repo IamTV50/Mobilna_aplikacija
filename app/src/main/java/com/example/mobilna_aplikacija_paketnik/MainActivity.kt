@@ -2,7 +2,7 @@ package com.example.mobilna_aplikacija_paketnik
 
 import FaceLoginInterface
 import FaceLoginScreen
-import LogInterface
+import com.example.mobilna_aplikacija_paketnik.API.Log.LogInterface
 import LogScreen
 import LoginScreen
 import RegisterInterFace
@@ -33,10 +33,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.bson.types.ObjectId
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.Date
@@ -111,7 +109,7 @@ class MainActivity : ComponentActivity() {
             setContent {
                 val navController = rememberNavController()
 
-                NavHost(navController, startDestination = "logs") {
+                NavHost(navController, startDestination = "register") {
                     composable("home") {
                         HomeScreen(navController)
                     }

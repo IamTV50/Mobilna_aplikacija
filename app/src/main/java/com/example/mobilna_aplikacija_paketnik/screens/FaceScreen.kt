@@ -10,10 +10,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
@@ -23,6 +25,8 @@ import androidx.navigation.NavController
 import com.example.mobilna_aplikacija_paketnik.API.FaceLogin.FaceLoginResponse
 import com.example.mobilna_aplikacija_paketnik.API.Register.RegisterResponse
 import com.example.mobilna_aplikacija_paketnik.API.Register.RegisterUser
+import com.example.mobilna_aplikacija_paketnik.screens.Footer
+import com.example.mobilna_aplikacija_paketnik.screens.Header
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -59,76 +63,88 @@ fun FaceLoginScreen(
             }
         }
     }
-
     Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.fillMaxSize()
     ) {
-        Button(
-            onClick = {
-                if (picturesTaken < 3) {
-                    val imageFile = File(context.cacheDir, "temp_image_${System.currentTimeMillis()}.jpeg")
-                    tempImageFile.value = imageFile
-                    val imageUri = FileProvider.getUriForFile(
-                        context,
-                        context.packageName + ".fileprovider",
-                        imageFile
-                    )
-                    takePictureLauncher.launch(imageUri)
-                } else {
-                    Toast.makeText(context, "You have captured 3 photos", Toast.LENGTH_SHORT).show()
-                }
-            },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = picturesTaken < 3 // Enable the button if picturesTaken is less than 3
+        Header() // Added Header composable
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
+                .weight(1f), // Added weight to occupy remaining space
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Capture Pictures")
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = {
-                if (capturedPictures.size == 3) {
-                    val username = sharedPreferences.getString("username", "") ?: ""
-                    val parts = capturedPictures.mapIndexedNotNull { index, bitmap ->
-                        bitmap?.let {
-                            val byteArray = it.toByteArray()
-                            val requestBody = byteArray.toRequestBody("image/png".toMediaTypeOrNull())
-                            val fileName = "image_$index.jpeg"
-                            println("Image $fileName: ${byteArray.size} bytes")
-                            MultipartBody.Part.createFormData("images", fileName, requestBody)
-                        }
+            Button(
+                onClick = {
+                    if (picturesTaken < 3) {
+                        val imageFile = File(context.cacheDir, "temp_image_${System.currentTimeMillis()}.jpeg")
+                        tempImageFile.value = imageFile
+                        val imageUri = FileProvider.getUriForFile(
+                            context,
+                            context.packageName + ".fileprovider",
+                            imageFile
+                        )
+                        takePictureLauncher.launch(imageUri)
+                    } else {
+                        Toast.makeText(context, "You have captured 3 photos", Toast.LENGTH_SHORT).show()
                     }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = picturesTaken < 3,
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0x30, 0x30, 0x36))
+            ) {
+                Text(text = "Capture Pictures")
+            }
 
-                    // Wrap the API call in a coroutine using launch
-                    scope.launch {
-                        try {
-                            val response: Response<FaceLoginResponse> = faceLoginInterface.loginFace(username, parts)
+            Spacer(modifier = Modifier.height(16.dp))
 
-                            if (response.isSuccessful) {
-                                // Handle successful login
-                                println("Image upload successful")
-                                navController.navigate("home")
-                            } else {
-                                // Handle login failure
-                                println("Image upload failed")
+            Button(
+                onClick = {
+                    if (capturedPictures.size == 3) {
+                        val username = sharedPreferences.getString("username", "") ?: ""
+                        val parts = capturedPictures.mapIndexedNotNull { index, bitmap ->
+                            bitmap?.let {
+                                val byteArray = it.toByteArray()
+                                val requestBody = byteArray.toRequestBody("image/png".toMediaTypeOrNull())
+                                val fileName = "image_$index.jpeg"
+                                println("Image $fileName: ${byteArray.size} bytes")
+                                MultipartBody.Part.createFormData("images", fileName, requestBody)
                             }
-                        } catch (e: Exception) {
-                            // Handle exception
-                            println("Image upload failed: ${e.message}")
                         }
+
+                        // Wrap the API call in a coroutine using launch
+                        scope.launch {
+                            try {
+                                val response: Response<FaceLoginResponse> = faceLoginInterface.loginFace(username, parts)
+
+                                if (response.isSuccessful) {
+                                    // Handle successful login
+                                    println("Image upload successful")
+                                    navController.navigate("home")
+                                } else {
+                                    // Handle login failure
+                                    println("Image upload failed")
+                                }
+                            } catch (e: Exception) {
+                                // Handle exception
+                                println("Image upload failed: ${e.message}")
+                            }
+                        }
+                    } else {
+                        Toast.makeText(context, "Please capture 3 photos", Toast.LENGTH_SHORT).show()
                     }
-                } else {
-                    Toast.makeText(context, "Please capture 3 photos", Toast.LENGTH_SHORT).show()
-                }
-            },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = capturedPictures.size == 3
-        ) {
-            Text(text = "Submit")
+                },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = capturedPictures.size == 3
+            ) {
+                Text(text = "Submit")
+            }
         }
+
+        Footer() // Added Footer composable
     }
+
 }
 

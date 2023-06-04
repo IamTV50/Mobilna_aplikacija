@@ -1,3 +1,5 @@
+package com.example.mobilna_aplikacija_paketnik.API.Log
+
 import com.example.mobilna_aplikacija_paketnik.API.Log.LogItem
 import com.example.mobilna_aplikacija_paketnik.API.Log.LogResponse
 import com.example.mobilna_aplikacija_paketnik.API.Log.LogRequest

@@ -41,6 +41,8 @@ import com.example.mobilna_aplikacija_paketnik.API.FaceLogin.FaceLoginResponse
 import com.example.mobilna_aplikacija_paketnik.API.Login.LoginRequest
 import com.example.mobilna_aplikacija_paketnik.API.Login.LoginInterface
 import com.example.mobilna_aplikacija_paketnik.API.Register.RegisterResponse
+import com.example.mobilna_aplikacija_paketnik.screens.Footer
+import com.example.mobilna_aplikacija_paketnik.screens.Header
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -149,22 +151,31 @@ fun LoginScreen(
     faceLogInter: FaceLoginInterface
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.fillMaxSize()
     ) {
-        Column(modifier = Modifier.padding(bottom = 16.dp)) {
-            Text(
-                text = "Login",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold
-            )
-            LoginForm(loginInter, navController, faceLogInter)
+        Header() // Added Header composable
 
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
+                .weight(1f), // Added weight to occupy remaining space
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Column(modifier = Modifier.padding(bottom = 16.dp)) {
+                Text(
+                    text = "Login",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                LoginForm(loginInter, navController, faceLogInter)
+            }
         }
+
+        Footer() // Added Footer composable
     }
+
 }
 
 
