@@ -1,6 +1,6 @@
 package com.example.mobilna_aplikacija_paketnik.screens
 
-import LogInterface
+import com.example.mobilna_aplikacija_paketnik.API.Log.LogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.media.MediaPlayer
@@ -10,12 +10,16 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -23,8 +27,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.navigation.NavController
@@ -184,29 +190,42 @@ fun CameraScreen(
 
 
     Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.fillMaxSize()
     ) {
-        Button(
-            onClick = {
-                val intent = Intent("com.google.zxing.client.android.SCAN")
-                launcher.launch(intent)
+        Header() // Added Header composable
 
-            }
+        Box(
+            modifier = Modifier.weight(1f)
         ) {
-            Text(text = "Scan QR Code")
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Button(
+                    onClick = {
+                        val intent = Intent("com.google.zxing.client.android.SCAN")
+                        launcher.launch(intent)
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0x30, 0x30, 0x36)),
+                ) {
+                    Text(text = "Scan QR Code")
+                }
+
+                Text(
+                    text = "QR Code Value: ${qrCodeValue.value}",
+                    modifier = Modifier.padding(top = 16.dp)
+                )
+                Text(
+                    text = "API response: ${response.value}",
+                    modifier = Modifier.padding(top = 16.dp)
+                )
+            }
         }
-
-        Text(
-            text = "QR Code Value: ${qrCodeValue.value}",
-            modifier = Modifier.padding(top = 16.dp)
-        )
-        Text(
-            text = "API response: ${response.value}",
-            modifier = Modifier.padding(top = 16.dp)
-        )
-
+        Footer() // Added Footer composable
     }
+
 }
+
+
 
