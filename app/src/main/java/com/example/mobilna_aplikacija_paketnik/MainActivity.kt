@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
         val scope = CoroutineScope(Dispatchers.Main)
         super.onCreate(savedInstanceState)
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:3001/") // Replace with your API base URL
+            .baseUrl("http://192.168.0.44:3001/") // Replace with your API base URL
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val retrofitAPI = Retrofit.Builder()
@@ -109,7 +109,7 @@ class MainActivity : ComponentActivity() {
             setContent {
                 val navController = rememberNavController()
 
-                NavHost(navController, startDestination = "register") {
+                NavHost(navController, startDestination = "login") {
                     composable("home") {
                         HomeScreen(navController)
                     }
