@@ -75,44 +75,47 @@ fun LogScreen(
     ) {
         LazyColumn {
             items(GetLogResponse.value) { log ->
-                    Card(
-                        shape = MaterialTheme.shapes.medium,
-                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp, pressedElevation = 8.dp),
-                        modifier = Modifier
-                            .background(color = Color(0x6A, 0x8D, 0x73))
-                            .fillMaxWidth()
-                            .padding(bottom = 8.dp), // Add padding as per your requirement
-                    )
-                 {
+                Card(
+                    shape = MaterialTheme.shapes.medium,
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp, pressedElevation = 8.dp),
+                    modifier = Modifier
+                        .background(color = Color(0x6A, 0x8D, 0x73))
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp),
+                ) {
                     Column(modifier = Modifier.padding(16.dp)) {
+                        // Display boxId and timestamp
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(Icons.Default.Person, contentDescription = null)
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(text = "User: ${log.user}", style = MaterialTheme.typography.bodySmall)
-
-                        }
-
-                        Divider(modifier = Modifier.padding(vertical = 8.dp))
-
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(Icons.Default.Refresh, contentDescription = null)
+                            Text(text = "Box ID: ${log.boxId}", style = MaterialTheme.typography.bodySmall)
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(text = "Opened: ${log.opend}", style = MaterialTheme.typography.bodySmall)
                         }
 
                         Divider(modifier = Modifier.padding(vertical = 8.dp))
 
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            //Icon(Icons.Default.Security, contentDescription = null)
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(text = "Force: ${log.force}", style = MaterialTheme.typography.bodySmall)
+                        // Display force if true, otherwise display everything else
+                        if (log.force) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(text = "Force: ${log.force}", style = MaterialTheme.typography.bodySmall)
+                            }
+                        } else {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(Icons.Default.Person, contentDescription = null)
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(text = "User: ${log.user}", style = MaterialTheme.typography.bodySmall)
+                            }
+
+                            Divider(modifier = Modifier.padding(vertical = 8.dp))
+
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(Icons.Default.Refresh, contentDescription = null)
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(text = "Opened: ${log.opend}", style = MaterialTheme.typography.bodySmall)
+                            }
                         }
-
-                        Divider(modifier = Modifier.padding(vertical = 8.dp))
-
-                        Text(text = "Box ID: ${log.boxId}", style = MaterialTheme.typography.bodySmall)
                     }
                 }
+
             }
         }
     }
