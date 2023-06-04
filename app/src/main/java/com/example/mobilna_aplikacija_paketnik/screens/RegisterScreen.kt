@@ -12,18 +12,23 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.navigation.NavController
@@ -79,23 +84,43 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
     }
 
     Column(modifier = Modifier.padding(16.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+        ) {
+            Text(
+                text = "Register",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+        }
+        Text(text = "Username")
         TextField(
             value = username.value,
             onValueChange = { newValue -> username.value = newValue },
             modifier = Modifier.padding(bottom = 8.dp)
+                .fillMaxWidth(),
+            colors = TextFieldDefaults.textFieldColors(containerColor = Color.LightGray),
         )
-
+        Text(text = "Password")
         TextField(
             value = password.value,
             onValueChange = { newValue -> password.value = newValue },
             modifier = Modifier.padding(bottom = 8.dp)
+                .fillMaxWidth(),
+            colors = TextFieldDefaults.textFieldColors(containerColor = Color.LightGray),
         )
-
+        Text(text = "Email")
         TextField(
             value = email.value,
             onValueChange = { newValue -> email.value = newValue },
             modifier = Modifier.padding(bottom = 8.dp)
+                .fillMaxWidth(),
+            colors = TextFieldDefaults.textFieldColors(containerColor = Color.LightGray),
         )
+
 
         val tempImageFile = remember { mutableStateOf<File?>(null) }
 
@@ -115,7 +140,7 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
 
         Button(
             onClick = {
-                if (picturesTaken.value < 5) {
+                if (picturesTaken.value < 2) {
                     checkAndRequestCameraPermission(context, permission, launcher)
                     coroutineScope.launch {
                         val imageFile = File(context.cacheDir, "temp_image_${System.currentTimeMillis()}.jpeg")
@@ -132,7 +157,8 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
                 }
             },
             modifier = Modifier.fillMaxWidth(),
-            enabled = picturesTaken.value < 5 // Enable the button if picturesTaken is less than 5
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0x30, 0x30, 0x36)),
+            enabled = picturesTaken.value < 2 // Enable the button if picturesTaken is less than 2
         ) {
             Text("Capture Pictures")
         }
@@ -189,7 +215,7 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
                 }
             },
             modifier = Modifier.fillMaxWidth(),
-            enabled = picturesTaken.value == 5 // Enable the button if picturesTaken is exactly 5
+            enabled = picturesTaken.value == 2 // Enable the button if picturesTaken is exactly 2
         ) {
             Text("Submit")
         }
