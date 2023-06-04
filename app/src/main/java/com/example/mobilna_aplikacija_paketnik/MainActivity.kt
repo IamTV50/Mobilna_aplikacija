@@ -111,7 +111,7 @@ class MainActivity : ComponentActivity() {
             setContent {
                 val navController = rememberNavController()
 
-                NavHost(navController, startDestination = "login") {
+                NavHost(navController, startDestination = "home") {
                     composable("home") {
                         HomeScreen(navController)
                     }

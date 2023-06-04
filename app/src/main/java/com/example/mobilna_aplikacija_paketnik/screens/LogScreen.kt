@@ -1,6 +1,7 @@
 import android.content.SharedPreferences
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -28,6 +29,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.ui.graphics.Color
+import com.google.android.gms.common.util.Hex
+
 //import androidx.compose.material.icons.filled.Security
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -75,8 +79,9 @@ fun LogScreen(
                         shape = MaterialTheme.shapes.medium,
                         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp, pressedElevation = 8.dp),
                         modifier = Modifier
+                            .background(color = Color(0x6A, 0x8D, 0x73))
                             .fillMaxWidth()
-                            .padding(bottom = 8.dp) // Add padding as per your requirement
+                            .padding(bottom = 8.dp), // Add padding as per your requirement
                     )
                  {
                     Column(modifier = Modifier.padding(16.dp)) {
@@ -84,6 +89,7 @@ fun LogScreen(
                             Icon(Icons.Default.Person, contentDescription = null)
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(text = "User: ${log.user}", style = MaterialTheme.typography.bodySmall)
+
                         }
 
                         Divider(modifier = Modifier.padding(vertical = 8.dp))
