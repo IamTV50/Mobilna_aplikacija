@@ -1,6 +1,7 @@
 package com.example.mobilna_aplikacija_paketnik.TSP
 
 import kotlin.math.pow
+import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
 data class City(
@@ -13,6 +14,9 @@ data class City(
     val longitude: String
 ) {
     fun distanceTo(other: City): Double {
-        return sqrt((latitude.toDouble() - other.latitude.toDouble()).pow(2) + (longitude.toDouble() - other.longitude.toDouble()).pow(2))
+        val xd = latitude.toDouble() - other.latitude.toDouble()
+        val yd = longitude.toDouble() - other.longitude.toDouble()
+
+        return sqrt(xd.pow(2) + yd.pow(2))
     }
 }

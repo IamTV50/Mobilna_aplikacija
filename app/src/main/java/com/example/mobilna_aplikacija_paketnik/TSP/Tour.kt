@@ -10,4 +10,10 @@ class Tour() {
     fun addCityToTour(city: City){ cities.add(city) }
 
     fun removeCityFromTour(city: City){ cities.remove(city) }
+
+    fun copy(): Tour {
+        val newTour = Tour()
+        cities.forEach { newTour.addCityToTour(it) }
+        return newTour
+    }
 }
