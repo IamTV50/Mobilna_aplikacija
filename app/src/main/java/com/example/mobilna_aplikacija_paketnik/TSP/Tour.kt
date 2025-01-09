@@ -1,19 +1,35 @@
 package com.example.mobilna_aplikacija_paketnik.TSP
 
-import java.util.Collections
+class Tour {
+    private var distance: Double = 0.0
+    private var dimension: Int = 0
+    private var path: MutableList<City> = mutableListOf()
 
-class Tour() {
-    private var cities: MutableList<City> = mutableListOf()
-
-    fun getGeneratedTour(): MutableList<City> { return cities }
-
-    fun addCityToTour(city: City){ cities.add(city) }
-
-    fun removeCityFromTour(city: City){ cities.remove(city) }
-
-    fun copy(): Tour {
-        val newTour = Tour()
-        cities.forEach { newTour.addCityToTour(it) }
-        return newTour
+    constructor(tour: Tour) {
+        distance = tour.distance
+        dimension = tour.dimension
+        path = tour.path.toMutableList()
     }
+
+    constructor(dimension: Int) {
+        this.dimension = dimension
+        path = MutableList(dimension) {
+            City("", "", "", "", "", "", "", 0)
+        }
+        distance = Double.MAX_VALUE
+    }
+
+    fun clone(): Tour { return Tour(this) }
+
+    fun getDistance(): Double = this.distance
+
+    fun setDistance(newDistance: Double) { this.distance = newDistance }
+
+    fun getPath(): MutableList<City> { return path }
+
+    fun setPath(path: MutableList<City>) { this.path = path.toMutableList() }
+
+    fun setCity(index: Int, city: City) { path[index] = city }
+
+    fun getDimension(): Int { return this.dimension }
 }

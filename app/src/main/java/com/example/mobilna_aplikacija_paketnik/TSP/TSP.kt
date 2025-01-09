@@ -1,192 +1,208 @@
 package com.example.mobilna_aplikacija_paketnik.TSP
 
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import java.io.File
 import kotlin.math.pow
-import kotlin.math.roundToInt
 import kotlin.math.sqrt
+import java.io.File
 
-class TSP(var problemPath: String) {
+class TSP(var problemPath: String, maxEvaluations: Int, var random: RandomUtils) {
     val ResourceRoot = "app/src/main/java/com/example/mobilna_aplikacija_paketnik/resources/"
-    private var cities = mutableListOf<Pair<Double, Double>>() // Store coordinates for EUC_2D
-    private var distanceMatrix: Array<IntArray> = arrayOf()
+
+    var start: City = City("", "", "", "", "", "", "", 0)
+    var cities: MutableList<City> = mutableListOf()
+    var numOfCities: Int = 0
+    var weights: Array<DoubleArray> = emptyArray()
+    private var numberOfEvaluations: Int = 0
+    private var maxEvaluations: Int = 0
+    var distanceType = DistanceType.EUCLIDEAN
     var edgeType: EdgeType? = null
     var edgeFormat: EdgeFormat? = null
     private var dimension: Int = 0
+    private var distanceMatrix: Array<IntArray> = arrayOf()
+    private var displayCoordinates = mutableListOf<Pair<Double, Double>>() // for visualization in case of FULL_MATRIX
 
     init {
         this.problemPath = ResourceRoot + problemPath
         loadData(problemPath)
+        this.maxEvaluations = maxEvaluations
+        this.numberOfEvaluations = 0
     }
 
-    fun calculateDistance(city1: City, city2: City): Double {
-        if (city1 == city2) return 0.0
+    fun evaluate(tour: Tour) {
+        var distance = 0.0
+        distance += calculateDistance(start, tour.getPath()[0])
+        for (index in 0 until numOfCities) {
+            if (index + 1 < numOfCities) distance += calculateDistance(
+                tour.getPath()[index],
+                tour.getPath()[index + 1]
+            )
+            else distance += calculateDistance(tour.getPath()[index], start)
+        }
+        tour.setDistance(distance)
+        numberOfEvaluations++
+    }
+
+    private fun calculateDistance(from: City?, to: City?): Double {
+        var dist = Double.MAX_VALUE
+
+        if (from == null || to == null) return dist
+        if (from == to) return 0.0
+
+        when (distanceType) {
+            DistanceType.EUCLIDEAN -> {
+                val dx = to.latitude.toDouble() - from.latitude.toDouble()
+                val dy = to.longitude.toDouble() - from.longitude.toDouble()
+                dist = sqrt(dx.pow(2.0) + dy.pow(2))
+            }
+            DistanceType.WEIGHTED -> {
+                // Get weights from matrix
+                dist = this.weights[from.index][to.index]
+            }
+        }
+
+        return dist
+    }
+
+    private fun loadData(path: String) {
+        val file = File(path)
+        if (!file.exists()) {
+            println("File $path not found!")
+            return
+        }
+
+        //var dimension = 0
+        var readingNodes = false
+        var readingWeights = false
+        var readingDisplay = false
+
+        file.useLines { lines ->
+            lines.forEach { line ->
+                when {
+                    line.startsWith("DIMENSION") -> {
+                        dimension = line.split(":")[1].trim().toInt()
+                        cities = MutableList(dimension) { City("", "", "", "", "", "", "", it) }
+                        distanceMatrix = Array(dimension) { IntArray(dimension) }
+                    }
+                    line.startsWith("EDGE_WEIGHT_TYPE") -> {
+                        edgeType = when (line.split(":")[1].trim()) {
+                            "EUC_2D" -> EdgeType.EUC_2D
+                            "EXPLICIT" -> EdgeType.EXPLICIT
+                            else -> throw IllegalArgumentException("Unsupported edge weight type")
+                        }
+                    }
+                    line.startsWith("EDGE_WEIGHT_FORMAT") -> {
+                        edgeFormat = when (line.split(":")[1].trim()) {
+                            "FULL_MATRIX" -> EdgeFormat.FULL_MATRIX
+                            else -> throw IllegalArgumentException("Unsupported edge format type")
+                        }
+                    }
+                    line.startsWith("NODE_COORD_SECTION") -> {
+                        readingNodes = true
+                        readingWeights = false
+                    }
+                    line.startsWith("EDGE_WEIGHT_SECTION") -> {
+                        readingNodes = false
+                        readingWeights = true
+                        readingDisplay = false
+                        weights = Array(dimension) { DoubleArray(dimension) }
+                    }
+                    line.startsWith("DISPLAY_DATA_SECTION") -> {
+                        readingWeights = false
+                        readingDisplay = true
+                    }
+                    line.startsWith("EOF") -> return@forEach
+                    else -> {
+                        when {
+                            readingNodes -> {
+                                val parts = line.trim().split(Regex("\\s+"))
+                                if (parts.size >= 3) {
+                                    val index = parts[0].toInt() - 1
+                                    cities[index] = City(
+                                        "City$index",
+                                        "",
+                                        "",
+                                        "",
+                                        "",
+                                        parts[1], // x coordinate
+                                        parts[2], // y coordinate
+                                        index
+                                    )
+                                }
+                            }
+                            readingWeights -> {
+                                val values = line.trim().split(Regex("\\s+"))
+                                    .filter { it.isNotEmpty() }
+                                    .map { it.toDouble() }
+                                if (values.isNotEmpty()) {
+                                    // Fill weights matrix
+                                    var row = 0
+                                    var col = 0
+                                    values.forEach { value ->
+                                        weights[row][col] = value
+                                        col++
+                                        if (col >= dimension) {
+                                            col = 0
+                                            row++
+                                        }
+                                    }
+                                }
+                            }
+                            readingDisplay -> parseDisplayData(line)
+                        }
+                    }
+                }
+            }
+        }
+
+        // Define cities coorinates from displayCoordinates if edge format is full_matrix
+        for (index in displayCoordinates.indices) {
+            cities[index] = City(
+                "City$index",
+                "",
+                "",
+                "",
+                "",
+                displayCoordinates[index].first.toString(), // x coordinate
+                displayCoordinates[index].second.toString(), // y coordinate
+                index
+            )
+        }
+
+        // Set starting city
+        start = cities[0]
+        numOfCities = dimension
+    }
+
+    private fun parseDisplayData(line: String) {
+        val parts = line.trim().split(Regex("\\s+"))
+        if (parts.size >= 3) {
+            val x = parts[1].toDoubleOrNull()
+            val y = parts[2].toDoubleOrNull()
+            if (x != null && y != null) {
+                displayCoordinates.add(Pair(x, y))
+            }
+        }
+    }
+
+    fun generateTour(): Tour {
+        val tour = Tour(cities.size)
+        val indices = (0 until cities.size).toMutableList()
+        val shuffledCities = mutableListOf<City>()
+
+        while (indices.isNotEmpty()) {
+            val index = random.nextInt(indices.size)
+            shuffledCities.add(cities[indices[index]])
+            indices.removeAt(index)
+        }
         
-        when (edgeType) {
-            EdgeType.EXPLICIT -> {
-                // Use pre-calculated distance matrix
-                val i = cities.indexOfFirst { it.first == city1.latitude.toDouble() && it.second == city1.longitude.toDouble() }
-                val j = cities.indexOfFirst { it.first == city2.latitude.toDouble() && it.second == city2.longitude.toDouble() }
-                return if (i >= 0 && j >= 0) distanceMatrix[i][j].toDouble() else city1.distanceTo(city2)
-            }
-            EdgeType.EUC_2D -> {
-                // Calculate Euclidean distance
-                return city1.distanceTo(city2)
-            }
-            else -> return city1.distanceTo(city2)
-        }
-    }
-
-    // For testing with .tsp files
-    fun generateTSPTour(random: RandomUtils): MutableList<City> {
-        val tour = mutableListOf<City>()
-
-        //val a = random.nextDouble()
-        //val c = random.getSeed()
-        //val b = 1
-
-        for (i in 0 until dimension) {
-            tour.add(City(
-                "City$i",
-                "",
-                "",
-                "",
-                "",
-                (random.nextDouble() / 1000.0).toString(),
-                (random.nextDouble() / 1000.0).toString()
-            ))
-        }
+        tour.setPath(shuffledCities)
         return tour
     }
 
-    // For actual locations from JSON (will be used in visualization)
-    fun generateLocationsTour(): MutableList<City> {
-        val file = File(ResourceRoot + "locations.json")
-        val jsonString = file.readText()
-        val gson = Gson()
-        val cityListType = object : TypeToken<List<City>>() {}.type
-        return gson.fromJson<List<City>>(jsonString, cityListType).toMutableList()
-    }
+    fun getMaxEvaluations(): Int { return maxEvaluations }
 
-    // load/parse .tsp files
-    private fun loadData(filePath: String) {
-        val lines = File(filePath).readLines()
-        val edgeWeightSection = mutableListOf<String>()
+    fun getNumberOfEvaluations(): Int { return numberOfEvaluations }
 
-        for (line in lines) {
-            when {
-                line.startsWith("DIMENSION") -> {
-                    dimension = line.split(":")[1].trim().toInt()
-                }
-                line.startsWith("EDGE_WEIGHT_TYPE") -> {
-                    edgeType = EdgeType.valueOf(line.split(":")[1].trim())
-                }
-                line.startsWith("EDGE_WEIGHT_FORMAT") -> {
-                    edgeFormat = EdgeFormat.valueOf(line.split(":")[1].trim())
-                }
-                line.startsWith("EDGE_WEIGHT_SECTION") -> {
-                    edgeWeightSection.addAll(lines.dropWhile { it != line }.drop(1))
-                    break
-                }
-                line.startsWith("NODE_COORD_SECTION") -> {
-                    edgeWeightSection.addAll(lines.dropWhile { it != line }.drop(1))
-                    break
-                }
-            }
-        }
-
-        if (dimension > 0 && edgeWeightSection.isNotEmpty()) {
-            when (edgeType) {
-                EdgeType.EXPLICIT -> {
-                    if (edgeFormat == EdgeFormat.FULL_MATRIX) {
-                        distanceMatrix = parseFullMatrix(edgeWeightSection, dimension)
-                    } else {
-                        throw IllegalArgumentException("Unsupported EDGE_WEIGHT_FORMAT")
-                    }
-                }
-                EdgeType.EUC_2D -> {
-                    cities = parseEUC2DCoordinates(edgeWeightSection, dimension)
-                    distanceMatrix = calculateDistanceMatrix(cities)
-                }
-                else -> throw IllegalArgumentException("Unsupported EDGE_WEIGHT_TYPE")
-            }
-        } else {
-            throw IllegalArgumentException("File read error: missing data")
-        }
-    }
-
-    private fun parseFullMatrix(lines: List<String>, dimension: Int): Array<IntArray> {
-        val matrix = Array(dimension) { IntArray(dimension) }
-        var rowIndex = 0
-        var colIndex = 0
-
-        for (line in lines) {
-            if (line.isBlank()) continue
-            if (line[0].isLetter()) break
-
-            val values = line.trim().split(Regex("\\s+")).mapNotNull { it.toIntOrNull() }
-            for (value in values) {
-                if (colIndex >= dimension) {
-                    rowIndex++
-                    colIndex = 0
-                }
-                if (rowIndex < dimension) {
-                    matrix[rowIndex][colIndex] = value
-                    colIndex++
-                }
-            }
-        }
-
-        if (rowIndex != dimension - 1 || colIndex != dimension) {
-            throw IllegalArgumentException("Matrix read error: mismatching dimensions")
-        }
-
-        return matrix
-    }
-
-    private fun parseEUC2DCoordinates(lines: List<String>, dimension: Int): MutableList<Pair<Double, Double>> {
-        val coordinates = mutableListOf<Pair<Double, Double>>()
-
-        for (line in lines) {
-            if (line.isBlank() || line[0].isLetter()) continue
-
-            val parts = line.trim().split(Regex("\\s+"))
-            if (parts.size >= 3) {
-                val x = parts[1].toDoubleOrNull()
-                val y = parts[2].toDoubleOrNull()
-                if (x != null && y != null) {
-                    coordinates.add(Pair(x, y))
-                }
-            }
-        }
-
-        if (coordinates.size != dimension) {
-            throw IllegalArgumentException("Coordinates read error: mismatching dimensions")
-        }
-
-        return coordinates
-    }
-
-    private fun calculateDistanceMatrix(coordinates: List<Pair<Double, Double>>): Array<IntArray> {
-        val dimension = coordinates.size
-        val matrix = Array(dimension) { IntArray(dimension) }
-        
-        for (i in 0 until dimension) {
-            for (j in 0 until dimension) {
-                if (i == j) {
-                    matrix[i][j] = 0
-                } else {
-                    val dist = sqrt(
-                        (coordinates[i].first - coordinates[j].first).pow(2) + 
-                        (coordinates[i].second - coordinates[j].second).pow(2)
-                    )
-                    matrix[i][j] = dist.roundToInt()
-                }
-            }
-        }
-        return matrix
-    }
+    fun getDisplayCoordinates(): List<Pair<Double, Double>> { return displayCoordinates }
 }
 
 enum class EdgeType {
@@ -195,4 +211,8 @@ enum class EdgeType {
 
 enum class EdgeFormat {
     FULL_MATRIX
+}
+
+enum class DistanceType {
+    EUCLIDEAN, WEIGHTED
 }
