@@ -1,0 +1,1073 @@
+[
+    {
+        "city": "Ajdovščina",
+        "address": "Goriška cesta 24",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "6",
+        "zip_code": "5270",
+        "latitude": "45.88731749999999",
+        "longitude": "13.9031099"
+    },
+    {
+        "city": "Benedikt",
+        "address": "Čolnikov trg 9",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "2",
+        "zip_code": "2234",
+        "latitude": "46.60704080000001",
+        "longitude": "15.8914427"
+    },
+    {
+        "city": "Bled",
+        "address": "Ljubljanska cesta 10",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "4260",
+        "latitude": "46.367435",
+        "longitude": "14.111225"
+    },
+    {
+        "city": "Bohinjska Bistrica",
+        "address": "Trg svobode 2 C",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "4264",
+        "latitude": "46.271720",
+        "longitude": "13.952947"
+    },
+    {
+        "city": "Borovnica",
+        "address": "Molkov trg 12",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "1353",
+        "latitude": "45.919439",
+        "longitude": "14.3657063"
+    },
+    {
+        "city": "Bresternica",
+        "address": "Obrobna ulica 1",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "2",
+        "zip_code": "2354",
+        "latitude": "46.5671284",
+        "longitude": "15.5783612"
+    },
+    {
+        "city": "Brezovica pri Ljubljani",
+        "address": "Podpeška cesta 20",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "1351",
+        "latitude": "46.0204546",
+        "longitude": "14.4156787"
+    },
+    {
+        "city": "Brežice",
+        "address": "Ulica stare pravde 34",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "8250",
+        "latitude": "45.9048981",
+        "longitude": "15.5935286"
+    },
+    {
+        "city": "Celje",
+        "address": "Krekov trg 9",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "6",
+        "zip_code": "3101",
+        "latitude": "46.22938380000001",
+        "longitude": "15.2673827"
+    },
+    {
+        "city": "Črenšovci",
+        "address": "Ulica Prekmurske čete 14",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "2",
+        "zip_code": "9232",
+        "latitude": "46.5395328",
+        "longitude": "16.3338345"
+    },
+    {
+        "city": "Črna na Koroškem",
+        "address": "Center 16",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "2",
+        "zip_code": "2393",
+        "latitude": "46.470872",
+        "longitude": "14.850492"
+    },
+    {
+        "city": "Črnomelj",
+        "address": "Kolodvorska cesta 30 A",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "8340",
+        "latitude": "45.574697",
+        "longitude": "15.190417"
+    },
+    {
+        "city": "Dob",
+        "address": "Krtina 144",
+        "location_description": "Bar Rožmarinka",
+        "num_of_smart_packegers": "3",
+        "zip_code": "1233",
+        "latitude": "46.152568",
+        "longitude": "14.651351"
+    },
+    {
+        "city": "Dobova",
+        "address": "Ulica bratov Gerjovičev 52",
+        "location_description": "Ob nekdanji poštni poslovalnici",
+        "num_of_smart_packegers": "2",
+        "zip_code": "8257",
+        "latitude": "45.8950489",
+        "longitude": "15.6600698"
+    },
+    {
+        "city": "Dravograd",
+        "address": "Trg 4. julija 1",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "2370",
+        "latitude": "46.58931742141004",
+        "longitude": "15.024703712635688"
+    },
+    {
+        "city": "Gorišnica",
+        "address": "Gorišnica 79",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "2",
+        "zip_code": "2272",
+        "latitude": "46.408580",
+        "longitude": "16.012668"
+    },
+    {
+        "city": "Gornja Radgona",
+        "address": "Cesta na Stadion 1",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "9250",
+        "latitude": "46.675157",
+        "longitude": "15.994198"
+    },
+    {
+        "city": "Gornji Grad",
+        "address": "Podsmrečje 20",
+        "location_description": "Mercator",
+        "num_of_smart_packegers": "9",
+        "zip_code": "3342",
+        "latitude": "46.293542",
+        "longitude": "14.804608"
+    },
+    {
+        "city": "Gornji Grad",
+        "address": "Attemsov trg 8",
+        "location_description": "Poslovni objekt",
+        "num_of_smart_packegers": "6",
+        "zip_code": "3342",
+        "latitude": "46.295877",
+        "longitude": "14.804720"
+    },
+    {
+        "city": "Grosuplje",
+        "address": "Partizanska cesta 7",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "6",
+        "zip_code": "1290",
+        "latitude": "45.9560878",
+        "longitude": "14.6576872"
+    },
+    {
+        "city": "Idrija",
+        "address": "Vodnikova ulica 1",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "5280",
+        "latitude": "46.0013411",
+        "longitude": "14.0261225"
+    },
+    {
+        "city": "Ivančna Gorica",
+        "address": "Ploščad Osvobodilne fronte 4",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "1295",
+        "latitude": "45.93833859999999",
+        "longitude": "14.8058986"
+    },
+    {
+        "city": "Ivanjkovci",
+        "address": "Ivanjkovci 9 B",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "1",
+        "zip_code": "2259",
+        "latitude": "46.461814",
+        "longitude": "16.156150"
+    },
+    {
+        "city": "Izola/Isola",
+        "address": "Cankarjev drevored 1",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "8",
+        "zip_code": "6310",
+        "latitude": "45.5368801",
+        "longitude": "13.6605407"
+    },
+    {
+        "city": "Jesenice",
+        "address": "Cesta Cirila Tavčarja 8",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "4271",
+        "latitude": "46.4395815",
+        "longitude": "14.0431735"
+    },
+    {
+        "city": "Jesenice na Dolenjskem",
+        "address": "Jesenice 9",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "2",
+        "zip_code": "8261",
+        "latitude": "45.860658",
+        "longitude": "15.686063"
+    },
+    {
+        "city": "Kamnica",
+        "address": "Cesta v Rošpoh 18",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "3",
+        "zip_code": "2351",
+        "latitude": "46.5725265",
+        "longitude": "15.6119647"
+    },
+    {
+        "city": "Kamnik",
+        "address": "Ljubljanska cesta 14 A",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "6",
+        "zip_code": "1241",
+        "latitude": "46.208800",
+        "longitude": "14.598239"
+    },
+    {
+        "city": "Kidričevo",
+        "address": "Kopališka ulica 2",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "2",
+        "zip_code": "2325",
+        "latitude": "46.403460",
+        "longitude": "15.797043"
+    },
+    {
+        "city": "Kobilje",
+        "address": "Kobilje 30",
+        "location_description": "Občina Kobilje",
+        "num_of_smart_packegers": "3",
+        "zip_code": "9227",
+        "latitude": "46.684462",
+        "longitude": "16.392874"
+    },
+    {
+        "city": "Kočevje",
+        "address": "Ljubljanska cesta 23",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "6",
+        "zip_code": "1330",
+        "latitude": "45.6418719",
+        "longitude": "14.8562269"
+    },
+    {
+        "city": "Komenda",
+        "address": "Glavarjeva cesta 39",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "1218",
+        "latitude": "46.202763",
+        "longitude": "14.541557"
+    },
+    {
+        "city": "Koper",
+        "address": "Kolodvorska cesta 9",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "8",
+        "zip_code": "6104",
+        "latitude": "45.5402396",
+        "longitude": "13.7390539"
+    },
+    {
+        "city": "Kranj",
+        "address": "Dražgoška ulica 8",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "6",
+        "zip_code": "4101",
+        "latitude": "46.2485046",
+        "longitude": "14.3567391"
+    },
+    {
+        "city": "Kranj",
+        "address": "Škofjeloška cesta 17",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "4103",
+        "latitude": "46.23103080000001",
+        "longitude": "14.3462993"
+    },
+    {
+        "city": "Kranj",
+        "address": "Jezerska cesta 41",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "4104",
+        "latitude": "46.2472905",
+        "longitude": "14.3689151"
+    },
+    {
+        "city": "Kranj",
+        "address": "Ulica Lojzeta Hrovata 2",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "4105",
+        "latitude": "46.2377962",
+        "longitude": "14.3655885"
+    },
+    {
+        "city": "Kranjska Gora",
+        "address": "Borovška cesta 92",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "4280",
+        "latitude": "46.4849723",
+        "longitude": "13.7820449"
+    },
+    {
+        "city": "Krško",
+        "address": "Trg Matije Gubca 1",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "6",
+        "zip_code": "8271",
+        "latitude": "45.9579966",
+        "longitude": "15.4944917"
+    },
+    {
+        "city": "Lenart v Slovenskih goricah",
+        "address": "Partizanska cesta 3",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "2230",
+        "latitude": "46.5772865",
+        "longitude": "15.8305269"
+    },
+    {
+        "city": "Lendava/Lendva",
+        "address": "Trg ljudske pravice 7",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "9220",
+        "latitude": "46.5618657",
+        "longitude": "16.4549268"
+    },
+    {
+        "city": "Lesce",
+        "address": "Alpska cesta 37 B",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "4248",
+        "latitude": "46.361189",
+        "longitude": "14.158669"
+    },
+    {
+        "city": "Ljubljana",
+        "address": "Poljanski nasip 30",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "1104",
+        "latitude": "46.0506783",
+        "longitude": "14.514648"
+    },
+    {
+        "city": "Ljubljana",
+        "address": "Pražakova ulica 3",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "6",
+        "zip_code": "1106",
+        "latitude": "46.0569636",
+        "longitude": "14.5066563"
+    },
+    {
+        "city": "Ljubljana",
+        "address": "Zaloška cesta 57",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "1110",
+        "latitude": "46.0562923",
+        "longitude": "14.5347293"
+    },
+    {
+        "city": "Ljubljana",
+        "address": "Dunajska cesta 141",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "6",
+        "zip_code": "1113",
+        "latitude": "46.080131",
+        "longitude": "14.512329"
+    },
+    {
+        "city": "Ljubljana",
+        "address": "Riharjeva ulica 38",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "1115",
+        "latitude": "46.0390497",
+        "longitude": "14.4993901"
+    },
+    {
+        "city": "Ljubljana",
+        "address": "Vodnikova cesta 235",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "6",
+        "zip_code": "1117",
+        "latitude": "46.0786296",
+        "longitude": "14.4724501"
+    },
+    {
+        "city": "Ljubljana",
+        "address": "Resljeva cesta 14",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "1124",
+        "latitude": "46.0543498",
+        "longitude": "14.5110575"
+    },
+    {
+        "city": "Ljubljana",
+        "address": "Letališka cesta 12",
+        "location_description": "1A Avto Letališka",
+        "num_of_smart_packegers": "6",
+        "zip_code": "1122",
+        "latitude": "46.060722",
+        "longitude": "14.547932"
+    },
+    {
+        "city": "Ljubljana",
+        "address": "Tacenska cesta 94",
+        "location_description": "As Mlakar Tacen Lj.",
+        "num_of_smart_packegers": "4",
+        "zip_code": "1133",
+        "latitude": "46.060721",
+        "longitude": "14.547932"
+    },
+    {
+        "city": "Ljubljana",
+        "address": "Hrvaška ulica 8",
+        "location_description": "Center Desetka",
+        "num_of_smart_packegers": "30",
+        "zip_code": "1122",
+        "latitude": "46.067078",
+        "longitude": "14.545086"
+    },
+    {
+        "city": "Ljubljana",
+        "address": "Ob železnici 22",
+        "location_description": "Direct4me HQ",
+        "num_of_smart_packegers": "8",
+        "zip_code": "1110",
+        "latitude": "46.059325",
+        "longitude": "14.536441"
+    },
+    {
+        "city": "Ljubljana",
+        "address": "Hranilniška ulica 1",
+        "location_description": "Gostilna Raubar",
+        "num_of_smart_packegers": "6",
+        "zip_code": "1116",
+        "latitude": "46.064302",
+        "longitude": "14.506593"
+    },
+    {
+        "city": "Ljubljana",
+        "address": "Dunajska cesta 145",
+        "location_description": "Gostilnica Vinka",
+        "num_of_smart_packegers": "Multispace\npaketnik",
+        "zip_code": "1113",
+        "latitude": "46.080433",
+        "longitude": "14.512500"
+    },
+    {
+        "city": "Ljubljana",
+        "address": "Litijska cesta 140",
+        "location_description": "Hayat Market Litijska",
+        "num_of_smart_packegers": "6",
+        "zip_code": "1119",
+        "latitude": "46.044822",
+        "longitude": "14.559523"
+    },
+    {
+        "city": "Ljubljana",
+        "address": "Tehnološki park 22a",
+        "location_description": "Tehnološki park Ljubljana",
+        "num_of_smart_packegers": "Multispace\npaketnik",
+        "zip_code": "1125",
+        "latitude": "46.050644",
+        "longitude": "14.459545"
+    },
+    {
+        "city": "Ljubljana",
+        "address": "Tržaška cesta 89",
+        "location_description": "Vulkanizerstvo Pečar Tržaška",
+        "num_of_smart_packegers": "6",
+        "zip_code": "1111",
+        "latitude": "46.041769",
+        "longitude": "14.477373"
+    },
+    {
+        "city": "Ljubljana",
+        "address": "Cesta dveh cesarjev 73",
+        "location_description": "Petrol Barje - jug",
+        "num_of_smart_packegers": "Multispace\npaketnik",
+        "zip_code": "1123",
+        "latitude": "46.028895",
+        "longitude": "14.478371"
+    },
+    {
+        "city": "Ljubljana",
+        "address": "Cesta dveh cesarjev 71",
+        "location_description": "Petrol Barje - sever",
+        "num_of_smart_packegers": "Multispace\npaketnik",
+        "zip_code": "1123",
+        "latitude": "46.029154",
+        "longitude": "14.481882"
+    },
+    {
+        "city": "Ljubljana - Črnuče",
+        "address": "Dunajska cesta 361",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "6",
+        "zip_code": "1231",
+        "latitude": "46.102510",
+        "longitude": "14.529661"
+    },
+    {
+        "city": "Ljubljana - Polje",
+        "address": "Zadobrovška cesta 14",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "3",
+        "zip_code": "1260",
+        "latitude": "46.0560724",
+        "longitude": "14.5843876"
+    },
+    {
+        "city": "Ljubljana - Šentvid",
+        "address": "Prušnikova ulica 2",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "3",
+        "zip_code": "1210",
+        "latitude": "46.090429413490305",
+        "longitude": "14.47254625684279"
+    },
+    {
+        "city": "Makole",
+        "address": "Makole 37",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "2",
+        "zip_code": "2321",
+        "latitude": "46.3175324509693",
+        "longitude": "15.666780754515207"
+    },
+    {
+        "city": "Malečnik",
+        "address": "Malečnik 56",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "2229",
+        "latitude": "46.55560741562521",
+        "longitude": "15.693581596856102"
+    },
+    {
+        "city": "Maribor",
+        "address": "Istrska ulica 49",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "6",
+        "zip_code": "2104",
+        "latitude": "46.5484661",
+        "longitude": "15.6744646"
+    },
+    {
+        "city": "Maribor",
+        "address": "Šarhova ulica 59 A",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "6",
+        "zip_code": "2106",
+        "latitude": "46.55140362751462",
+        "longitude": "15.621160910349557"
+    },
+    {
+        "city": "Maribor",
+        "address": "Gosposvetska cesta 84",
+        "location_description": "PC Meltal - parkirišče",
+        "num_of_smart_packegers": "6",
+        "zip_code": "2101",
+        "latitude": "46.563480347613684",
+        "longitude": "15.627847096856422"
+    },
+    {
+        "city": "Maribor",
+        "address": "Tyrševa ulica 23",
+        "location_description": "Študentski domovi Maribor DOM\n1",
+        "num_of_smart_packegers": "6",
+        "zip_code": "2101",
+        "latitude": "46.56363708803481",
+        "longitude": "15.646268639185637"
+    },
+    {
+        "city": "Maribor",
+        "address": "Gosposvetska cesta 83",
+        "location_description": "Študentski domovi Maribor DOM\n7",
+        "num_of_smart_packegers": "6",
+        "zip_code": "2101",
+        "latitude": "46.56288104769516",
+        "longitude": "15.627136525691814"
+    },
+    {
+        "city": "Mengeš",
+        "address": "Trdinov trg 8 A",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "1234",
+        "latitude": "46.16295543277096",
+        "longitude": "14.56862039683684"
+    },
+    {
+        "city": "Metlika",
+        "address": "Naselje Borisa Kidriča 2",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "2",
+        "zip_code": "8330",
+        "latitude": "45.644935",
+        "longitude": "15.3167912"
+    },
+    {
+        "city": "Mirna",
+        "address": "Cesta na Fužine 3",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "2",
+        "zip_code": "8233",
+        "latitude": "45.9525271",
+        "longitude": "15.0599681"
+    },
+    {
+        "city": "Moravče",
+        "address": "Vegova ulica 1",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "1251",
+        "latitude": "46.1354712",
+        "longitude": "14.7446678"
+    },
+    {
+        "city": "Mozirje",
+        "address": "Savinjska cesta 3",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "3330",
+        "latitude": "46.3388265",
+        "longitude": "14.960194"
+    },
+    {
+        "city": "Murska Sobota",
+        "address": "Trg Zmage 6",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "6",
+        "zip_code": "9101",
+        "latitude": "46.66083343437134",
+        "longitude": "16.163772168025808"
+    },
+    {
+        "city": "Murska Sobota",
+        "address": "Ulica Štefana Kovača 43",
+        "location_description": "Maximus Murska sobota",
+        "num_of_smart_packegers": "4",
+        "zip_code": "9101",
+        "latitude": "46.66189917682032",
+        "longitude": "16.145329468025906"
+    },
+    {
+        "city": "Muta",
+        "address": "Glavni trg 31",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "2",
+        "zip_code": "2366",
+        "latitude": "46.61003729999999",
+        "longitude": "15.1633923"
+    },
+    {
+        "city": "Naklo",
+        "address": "Glavna cesta 24",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "4202",
+        "latitude": "46.27294450000001",
+        "longitude": "14.3157321"
+    },
+    {
+        "city": "Nova Gorica",
+        "address": "Kidričeva ulica 19",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "6",
+        "zip_code": "5101",
+        "latitude": "45.9555113",
+        "longitude": "13.6481122"
+    },
+    {
+        "city": "Nova Gorica",
+        "address": "Industrijska cesta 9",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "6",
+        "zip_code": "5102",
+        "latitude": "45.9540361",
+        "longitude": "13.6734952"
+    },
+    {
+        "city": "Novo mesto",
+        "address": "Ulica Slavka Gruma 7",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "8102",
+        "latitude": "45.7986362",
+        "longitude": "15.1552946"
+    },
+    {
+        "city": "Novo mesto",
+        "address": "Novi trg 7",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "6",
+        "zip_code": "8105",
+        "latitude": "45.8048435",
+        "longitude": "15.1643364"
+    },
+    {
+        "city": "Ormož",
+        "address": "Poštna ulica 2",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "2270",
+        "latitude": "46.4080192",
+        "longitude": "16.1487605"
+    },
+    {
+        "city": "Petrovci",
+        "address": "Gornji Petrovci 40 E",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "2",
+        "zip_code": "9203",
+        "latitude": "46.80475884599513",
+        "longitude": "16.216033668032892"
+    },
+    {
+        "city": "Polzela",
+        "address": "Malteška cesta 38",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "2",
+        "zip_code": "3313",
+        "latitude": "46.2807548410469",
+        "longitude": "15.075996168007084"
+    },
+    {
+        "city": "Postojna",
+        "address": "Ulica 1. maja 2 A",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "6230",
+        "latitude": "45.77495540470375",
+        "longitude": "14.211978639147196"
+    },
+    {
+        "city": "Preddvor",
+        "address": "Šiška 1",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "4205",
+        "latitude": "46.30218617098376",
+        "longitude": "14.42056199684362"
+    },
+    {
+        "city": "Prevalje",
+        "address": "Trg 32 A",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "2391",
+        "latitude": "46.54497629186453",
+        "longitude": "14.91426676802012"
+    },
+    {
+        "city": "Ptuj",
+        "address": "Mariborska Cesta 19",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "6",
+        "zip_code": "2251",
+        "latitude": "46.4165813",
+        "longitude": "15.8598698"
+    },
+    {
+        "city": "Rače",
+        "address": "Ljubljanska cesta 14",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "2327",
+        "latitude": "46.4536713",
+        "longitude": "15.6745675"
+    },
+    {
+        "city": "Radenci",
+        "address": "Panonska cesta 5",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "9252",
+        "latitude": "46.642603",
+        "longitude": "16.0392936"
+    },
+    {
+        "city": "Ravne na Koroškem",
+        "address": "Trg svobode 19",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "6",
+        "zip_code": "2390",
+        "latitude": "46.5446849",
+        "longitude": "14.9662266"
+    },
+    {
+        "city": "Ribnica",
+        "address": "Kolodvorska ulica 2",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "1310",
+        "latitude": "45.74039685873133",
+        "longitude": "14.727271167980932"
+    },
+    {
+        "city": "Selnica ob Dravi",
+        "address": "Slovenski trg 4",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "2352",
+        "latitude": "46.55150080000001",
+        "longitude": "15.4928736"
+    },
+    {
+        "city": "Sevnica",
+        "address": "Trg svobode 9",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "8290",
+        "latitude": "46.0097701",
+        "longitude": "15.3029322"
+    },
+    {
+        "city": "Sežana",
+        "address": "Partizanska cesta 48 A",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "6",
+        "zip_code": "6210",
+        "latitude": "45.707529555312284",
+        "longitude": "13.868557939143905"
+    },
+    {
+        "city": "Slovenj Gradec",
+        "address": "Kidričeva ulica 3a",
+        "location_description": "Kivi Com Slovenj Gradec",
+        "num_of_smart_packegers": "3",
+        "zip_code": "2380",
+        "latitude": "46.512197487408365",
+        "longitude": "15.07980699685398"
+    },
+    {
+        "city": "Spodnji Duplek",
+        "address": "Cesta k Dravi 5",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "2",
+        "zip_code": "2241",
+        "latitude": "46.50055039999999",
+        "longitude": "15.7495304"
+    },
+    {
+        "city": "Šempeter pri Gorici",
+        "address": "Vrtojbenska cesta 19 C",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "5290",
+        "latitude": "45.92836680845084",
+        "longitude": "13.640579839154583"
+    },
+    {
+        "city": "Šenčur",
+        "address": "Gasilska cesta 2 A",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "4208",
+        "latitude": "46.24233385081465",
+        "longitude": "14.419108454511612"
+    },
+    {
+        "city": "Šentjernej",
+        "address": "Prvomajska cesta 3",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "8310",
+        "latitude": "45.8439372",
+        "longitude": "15.3388595"
+    },
+    {
+        "city": "Šentjur",
+        "address": "Mestni trg 5a",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "6",
+        "zip_code": "3230",
+        "latitude": "46.21665027098003",
+        "longitude": "15.39485611033323"
+    },
+    {
+        "city": "Škofja Loka",
+        "address": "Kapucinski trg 14",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "4221",
+        "latitude": "46.166843",
+        "longitude": "14.3058782"
+    },
+    {
+        "city": "Šmarje pri Jelšah",
+        "address": "Aškerčev trg 26",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "2",
+        "zip_code": "3240",
+        "latitude": "46.2286544",
+        "longitude": "15.5184635"
+    },
+    {
+        "city": "Tolmin",
+        "address": "Trg maršala Tita 10",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "5220",
+        "latitude": "46.1830168",
+        "longitude": "13.7335635"
+    },
+    {
+        "city": "Trbovlje",
+        "address": "Trg revolucije 27",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "1420",
+        "latitude": "46.1482095",
+        "longitude": "15.0416941"
+    },
+    {
+        "city": "Trbovlje",
+        "address": "Trg Franca Fakina 4",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "1422",
+        "latitude": "46.1604049",
+        "longitude": "15.0536808"
+    },
+    {
+        "city": "Trebnje",
+        "address": "Goliev trg 11",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "8210",
+        "latitude": "45.90752029999999",
+        "longitude": "15.0072844"
+    },
+    {
+        "city": "Tržič",
+        "address": "Predilniška cesta 10",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "4290",
+        "latitude": "46.3616251",
+        "longitude": "14.3071259"
+    },
+    {
+        "city": "Velenje",
+        "address": "Kidričeva cesta 2a",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "6",
+        "zip_code": "3320",
+        "latitude": "46.36040147098652",
+        "longitude": "15.119029681504779"
+    },
+    {
+        "city": "Vrhnika",
+        "address": "Poštna ulica 2",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "6",
+        "zip_code": "1360",
+        "latitude": "46.4080192",
+        "longitude": "16.1487605"
+    },
+    {
+        "city": "Vrhnika",
+        "address": "Tržaška cesta 32",
+        "location_description": "Kulturni center Vrhnika",
+        "num_of_smart_packegers": "15",
+        "zip_code": "1360",
+        "latitude": "45.95965562927875",
+        "longitude": "14.292716410320704"
+    },
+    {
+        "city": "Zagorje ob Savi",
+        "address": "Cesta zmage 28",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "1410",
+        "latitude": "46.1306621",
+        "longitude": "14.9963062"
+    },
+    {
+        "city": "Zgornja Polskava",
+        "address": "Mariborska ulica 26",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "2",
+        "zip_code": "2314",
+        "latitude": "46.4263267",
+        "longitude": "15.611214"
+    },
+    {
+        "city": "Žalec",
+        "address": "Ulica heroja Staneta 1",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "3310",
+        "latitude": "46.2526713",
+        "longitude": "15.1599198"
+    },
+    {
+        "city": "Železniki",
+        "address": "Na Kresu 1",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "4228",
+        "latitude": "46.22653962637672",
+        "longitude": "14.167397896840061"
+    },
+    {
+        "city": "Žiri",
+        "address": "Trg svobode 1",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "4226",
+        "latitude": "46.0477691",
+        "longitude": "14.1099613"
+    },
+    {
+        "city": "Žirovnica",
+        "address": "Žirovnica 4",
+        "location_description": "Ob poštni poslovalnici",
+        "num_of_smart_packegers": "4",
+        "zip_code": "4274",
+        "latitude": "46.404051102051206",
+        "longitude": "14.135820351605947"
+    }
+]
