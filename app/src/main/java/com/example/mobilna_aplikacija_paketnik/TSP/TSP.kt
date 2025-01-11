@@ -1,12 +1,17 @@
 package com.example.mobilna_aplikacija_paketnik.TSP
 
+import android.content.Context
 import kotlin.math.pow
 import kotlin.math.sqrt
 import java.io.File
 
-class TSP(var problemPath: String, maxEvaluations: Int, var random: RandomUtils) {
-    val ResourceRoot = "app/src/main/java/com/example/mobilna_aplikacija_paketnik/resources/"
-
+class TSP(
+    var problemPath: String,
+    maxEvaluations: Int,
+    var random: RandomUtils,
+    private val context: Context? = null,
+    var ResourceRoot: String = "app/src/main/java/com/example/mobilna_aplikacija_paketnik/resources/"
+) {
     var start: City = City("", "", "", "", "", "", "", 0)
     var cities: MutableList<City> = mutableListOf()
     var numOfCities: Int = 0
@@ -21,8 +26,18 @@ class TSP(var problemPath: String, maxEvaluations: Int, var random: RandomUtils)
     private var displayCoordinates = mutableListOf<Pair<Double, Double>>() // for visualization in case of FULL_MATRIX
 
     init {
-        this.problemPath = ResourceRoot + problemPath
-        loadData(problemPath)
+        when {
+            context != null -> {
+                if (problemPath.startsWith(ResourceRoot)) {
+                    // Load from assets
+                    loadFromAssets(problemPath.removePrefix(ResourceRoot))
+                } else {
+                    // Load from internal storage
+                    loadFromInternal(problemPath)
+                }
+            }
+            else -> loadData(ResourceRoot + problemPath)
+        }
         this.maxEvaluations = maxEvaluations
         this.numberOfEvaluations = 0
     }
@@ -62,92 +77,109 @@ class TSP(var problemPath: String, maxEvaluations: Int, var random: RandomUtils)
         return dist
     }
 
+    private fun loadFromAssets(assetPath: String) {
+        try {
+            context?.assets?.open(assetPath)?.bufferedReader()?.use { reader ->
+                parseFileContent(reader.readLines())
+            }
+        } catch (e: Exception) {
+            println("Error reading asset file: ${e.message}")
+            return
+        }
+    }
+
+    private fun loadFromInternal(fileName: String) {
+        context?.openFileInput(fileName)?.bufferedReader()?.use { reader ->
+            parseFileContent(reader.readLines())
+        }
+    }
+
     private fun loadData(path: String) {
         val file = File(path)
         if (!file.exists()) {
             println("File $path not found!")
             return
         }
+        parseFileContent(file.readLines())
+    }
 
-        //var dimension = 0
+    private fun parseFileContent(lines: List<String>) {
         var readingNodes = false
         var readingWeights = false
         var readingDisplay = false
 
-        file.useLines { lines ->
-            lines.forEach { line ->
-                when {
-                    line.startsWith("DIMENSION") -> {
-                        dimension = line.split(":")[1].trim().toInt()
-                        cities = MutableList(dimension) { City("", "", "", "", "", "", "", it) }
-                        distanceMatrix = Array(dimension) { IntArray(dimension) }
+        lines.forEach { line ->
+            when {
+                line.startsWith("DIMENSION") -> {
+                    dimension = line.split(":")[1].trim().toInt()
+                    cities = MutableList(dimension) { City("", "", "", "", "", "", "", it) }
+                    distanceMatrix = Array(dimension) { IntArray(dimension) }
+                }
+                line.startsWith("EDGE_WEIGHT_TYPE") -> {
+                    edgeType = when (line.split(":")[1].trim()) {
+                        "EUC_2D" -> EdgeType.EUC_2D
+                        "EXPLICIT" -> EdgeType.EXPLICIT
+                        else -> throw IllegalArgumentException("Unsupported edge weight type")
                     }
-                    line.startsWith("EDGE_WEIGHT_TYPE") -> {
-                        edgeType = when (line.split(":")[1].trim()) {
-                            "EUC_2D" -> EdgeType.EUC_2D
-                            "EXPLICIT" -> EdgeType.EXPLICIT
-                            else -> throw IllegalArgumentException("Unsupported edge weight type")
-                        }
+                }
+                line.startsWith("EDGE_WEIGHT_FORMAT") -> {
+                    edgeFormat = when (line.split(":")[1].trim()) {
+                        "FULL_MATRIX" -> EdgeFormat.FULL_MATRIX
+                        else -> throw IllegalArgumentException("Unsupported edge format type")
                     }
-                    line.startsWith("EDGE_WEIGHT_FORMAT") -> {
-                        edgeFormat = when (line.split(":")[1].trim()) {
-                            "FULL_MATRIX" -> EdgeFormat.FULL_MATRIX
-                            else -> throw IllegalArgumentException("Unsupported edge format type")
-                        }
-                    }
-                    line.startsWith("NODE_COORD_SECTION") -> {
-                        readingNodes = true
-                        readingWeights = false
-                    }
-                    line.startsWith("EDGE_WEIGHT_SECTION") -> {
-                        readingNodes = false
-                        readingWeights = true
-                        readingDisplay = false
-                        weights = Array(dimension) { DoubleArray(dimension) }
-                    }
-                    line.startsWith("DISPLAY_DATA_SECTION") -> {
-                        readingWeights = false
-                        readingDisplay = true
-                    }
-                    line.startsWith("EOF") -> return@forEach
-                    else -> {
-                        when {
-                            readingNodes -> {
-                                val parts = line.trim().split(Regex("\\s+"))
-                                if (parts.size >= 3) {
-                                    val index = parts[0].toInt() - 1
-                                    cities[index] = City(
-                                        "City$index",
-                                        "",
-                                        "",
-                                        "",
-                                        "",
-                                        parts[1], // x coordinate
-                                        parts[2], // y coordinate
-                                        index
-                                    )
-                                }
+                }
+                line.startsWith("NODE_COORD_SECTION") -> {
+                    readingNodes = true
+                    readingWeights = false
+                }
+                line.startsWith("EDGE_WEIGHT_SECTION") -> {
+                    readingNodes = false
+                    readingWeights = true
+                    readingDisplay = false
+                    weights = Array(dimension) { DoubleArray(dimension) }
+                }
+                line.startsWith("DISPLAY_DATA_SECTION") -> {
+                    readingWeights = false
+                    readingDisplay = true
+                }
+                line.startsWith("EOF") -> return@forEach
+                else -> {
+                    when {
+                        readingNodes -> {
+                            val parts = line.trim().split(Regex("\\s+"))
+                            if (parts.size >= 3) {
+                                val index = parts[0].toInt() - 1
+                                cities[index] = City(
+                                    "City$index",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    parts[1], // x coordinate
+                                    parts[2], // y coordinate
+                                    index
+                                )
                             }
-                            readingWeights -> {
-                                val values = line.trim().split(Regex("\\s+"))
-                                    .filter { it.isNotEmpty() }
-                                    .map { it.toDouble() }
-                                if (values.isNotEmpty()) {
-                                    // Fill weights matrix
-                                    var row = 0
-                                    var col = 0
-                                    values.forEach { value ->
-                                        weights[row][col] = value
-                                        col++
-                                        if (col >= dimension) {
-                                            col = 0
-                                            row++
-                                        }
+                        }
+                        readingWeights -> {
+                            val values = line.trim().split(Regex("\\s+"))
+                                .filter { it.isNotEmpty() }
+                                .map { it.toDouble() }
+                            if (values.isNotEmpty()) {
+                                // Fill weights matrix
+                                var row = 0
+                                var col = 0
+                                values.forEach { value ->
+                                    weights[row][col] = value
+                                    col++
+                                    if (col >= dimension) {
+                                        col = 0
+                                        row++
                                     }
                                 }
                             }
-                            readingDisplay -> parseDisplayData(line)
                         }
+                        readingDisplay -> parseDisplayData(line)
                     }
                 }
             }
