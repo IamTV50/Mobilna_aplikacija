@@ -28,7 +28,8 @@ class TSP(
     init {
         when {
             context != null -> {
-                if (problemPath.startsWith(ResourceRoot)) {
+                if (problemPath == "selectedCities.tsp") { loadFromInternal(problemPath) }
+                else if (problemPath.startsWith(ResourceRoot)) {
                     // Load from assets
                     loadFromAssets(problemPath.removePrefix(ResourceRoot))
                 } else {

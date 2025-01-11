@@ -18,6 +18,7 @@ import com.example.mobilna_aplikacija_paketnik.TSP.City
 import com.example.mobilna_aplikacija_paketnik.TSP.GA
 import com.example.mobilna_aplikacija_paketnik.TSP.RandomUtils
 import com.example.mobilna_aplikacija_paketnik.TSP.TSP
+import com.example.mobilna_aplikacija_paketnik.TSP.Tour
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.google.maps.android.compose.GoogleMap
@@ -26,6 +27,7 @@ import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapUiSettings
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.CameraPosition
+import com.google.maps.android.compose.Polyline
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,9 +35,10 @@ fun TSPVisualMap(navController: NavController, sharedPreferences: SharedPreferen
     var allCities by remember { mutableStateOf<List<City>?>(null) }
     var selectedCities by remember { mutableStateOf(mutableListOf<City>()) }
     val random = RandomUtils()
-    val populationSize = 100
-    val crossoverRate = 0.8
-    val mutationRate = 0.1
+    var populationSize by remember{ mutableStateOf("100")}
+    var crossoverRate by remember{ mutableStateOf("0.8")}
+    var mutationRate by remember{ mutableStateOf("0.1")}
+    var bestTour by remember { mutableStateOf<Tour?>(null) }
 
     LaunchedEffect(Unit) {
         try {
@@ -57,12 +60,8 @@ fun TSPVisualMap(navController: NavController, sharedPreferences: SharedPreferen
         }
     }
 
-    var popSize by remember { mutableStateOf("") }
-    var crossoverProbability by remember { mutableStateOf("") }
-    var mutationProbability by remember { mutableStateOf("") }
-
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(LatLng(0.0, 0.0), 10f)
+        position = CameraPosition.fromLatLngZoom(LatLng(46.559248362905215, 15.641179177119962), 10f)
     }
     var timeDistanceCheck by remember { mutableStateOf(true) }
 
@@ -107,27 +106,27 @@ fun TSPVisualMap(navController: NavController, sharedPreferences: SharedPreferen
             Spacer(modifier = Modifier.height(16.dp))
 
             TextField(
-                value = popSize,
-                onValueChange = { popSize = it },
-                label = { Text("Population Size") },
+                value = populationSize,
+                onValueChange = { populationSize = it },
+                label = { Text("Population Size (default : ${populationSize})") },
                 modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             TextField(
-                value = crossoverProbability,
-                onValueChange = { crossoverProbability = it },
-                label = { Text("Crossover Probability") },
+                value = crossoverRate,
+                onValueChange = { crossoverRate = it },
+                label = { Text("Crossover Probability ( default: $crossoverRate") },
                 modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             TextField(
-                value = mutationProbability,
-                onValueChange = { mutationProbability = it },
-                label = { Text("Mutation Probability") },
+                value = mutationRate,
+                onValueChange = { mutationRate = it },
+                label = { Text("Mutation Probability (default: $mutationRate") },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -144,29 +143,63 @@ fun TSPVisualMap(navController: NavController, sharedPreferences: SharedPreferen
 
             Button(onClick = {
                 val generatedTSPFileName = "selectedCities.tsp"
-                generateTSP(selectedCities, generatedTSPFileName, 1000, navController.context)
+
+                if (!timeDistanceCheck) {
+                    generateTSP(selectedCities, generatedTSPFileName, 1000, navController.context, OptimizeType.TOUR_TIME)
+                }
+                else{
+                    generateTSP(selectedCities, generatedTSPFileName, 1000, navController.context)
+                }
 
                 random.setSeedFromTime()
 
-                //val tsp = TSP(generatedTSPFileName, 1000, random, navController.context, "") //todo add maxEval input field
-                //val ga = GA(populationSize, crossoverRate, mutationRate, random)
-                //val bestTour = ga.execute(tsp)
-                //todo - show bestTour on map (show bestTour.getDistance() on toast?)
+                val tsp = TSP(generatedTSPFileName, 150, random, navController.context, "")
+                val ga = GA(populationSize.toInt(), crossoverRate.toDouble(), mutationRate.toDouble(), random)
+                bestTour = ga.execute(tsp)
             }) {
                 Text("Start TSP with Selected Cities")
             }
 
+           // val metric = if (timeDistanceCheck) "Time" else "Distance"
+            //routeStatistics =
+
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Google Map
-            GoogleMap(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(400.dp),
-                cameraPositionState = cameraPositionState,
-                properties = MapProperties(isMyLocationEnabled = true),
-                uiSettings = MapUiSettings(zoomControlsEnabled = true)
-            )
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if (bestTour != null && bestTour!!.getPath().isNotEmpty()) {
+                Text(
+                    text = "Distance is "+bestTour!!.getDistance(),
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+
+                GoogleMap(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(400.dp),
+                    cameraPositionState = cameraPositionState,
+                    properties = MapProperties(isMyLocationEnabled = true),
+                    uiSettings = MapUiSettings(zoomControlsEnabled = true),
+                ) {
+                    val polylinesPoints = mutableListOf<LatLng>()
+
+                    for (c in bestTour!!.getPath()) {
+                        polylinesPoints.add(LatLng(c.latitude.toDouble(), c.longitude.toDouble()))
+                    }
+
+                    // Draw stuff (lines)
+                    if (polylinesPoints.isNotEmpty()) {
+                        Polyline(points = polylinesPoints)
+                    }
+                }
+            }
+            else {
+                Text(
+                    text = "Loading or no tour available.",
+                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                )
+            }
         }
     }
 }
@@ -217,7 +250,7 @@ fun generateTSP(
         for (i in 0 until n) {
             appendLine(newMatrix[i].joinToString(" "))
         }
-        
+
         appendLine("DISPLAY_DATA_SECTION")
         for (i in 0 until n) {
             val city = selectedCities[i]
