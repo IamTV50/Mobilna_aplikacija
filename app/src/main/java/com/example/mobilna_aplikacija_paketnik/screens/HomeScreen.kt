@@ -61,6 +61,7 @@ fun HomeScreen(navController: NavController) {
                     ) {
                         Text("View Logs")
                     }
+
                 }
                 Footer()
             }
