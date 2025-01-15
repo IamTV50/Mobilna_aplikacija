@@ -25,6 +25,7 @@ import androidx.navigation.NavController
 import com.example.mobilna_aplikacija_paketnik.API.FaceLogin.FaceLoginResponse
 import com.example.mobilna_aplikacija_paketnik.API.Register.RegisterResponse
 import com.example.mobilna_aplikacija_paketnik.API.Register.RegisterUser
+import com.example.mobilna_aplikacija_paketnik.CompressionUtility
 import com.example.mobilna_aplikacija_paketnik.screens.Footer
 import com.example.mobilna_aplikacija_paketnik.screens.Header
 import kotlinx.coroutines.CoroutineScope
@@ -36,6 +37,12 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Response
 
 import java.io.File
+import java.io.FileOutputStream
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.util.Base64
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 
 @Composable
 fun FaceLoginScreen(
@@ -104,15 +111,34 @@ fun FaceLoginScreen(
                 onClick = {
                     if (capturedPictures.size == 3) {
                         val username = sharedPreferences.getString("username", "") ?: ""
-                        val parts = capturedPictures.mapIndexedNotNull { index, bitmap ->
-                            bitmap?.let {
-                                val byteArray = it.toByteArray()
-                                val requestBody = byteArray.toRequestBody("image/png".toMediaTypeOrNull())
-                                val fileName = "image_$index.jpeg"
-                                println("Image $fileName: ${byteArray.size} bytes")
-                                MultipartBody.Part.createFormData("images", fileName, requestBody)
+                        val zipFile=File(context.cacheDir, "captured_images.zip")
+                        ZipOutputStream(FileOutputStream(zipFile)).use { zipOut ->
+                            capturedPictures.forEachIndexed { index, bitmap ->
+                                val byteArray = bitmap.toByteArray()
+                                val zipEntry = ZipEntry("image_$index.jpeg")
+                                zipOut.putNextEntry(zipEntry)
+                                zipOut.write(byteArray)
+                                zipOut.closeEntry()
                             }
                         }
+                        val compressionUtility = CompressionUtility()
+                        val base64String = encodetoBase64(zipFile.absolutePath)
+                        var base64StringInt=base64ToNumericValues(base64String)
+                        val compressedData = compressionUtility.compress(base64StringInt)
+                        val requestBody = compressedData.toRequestBody("application/octet-stream".toMediaTypeOrNull())
+                        val part = MultipartBody.Part.createFormData("compressed_data", "compressed_data.bin", requestBody)
+
+//                        val parts = capturedPictures.mapIndexedNotNull { index, bitmap ->
+//                            bitmap?.let {
+//                                val byteArray = it.toByteArray()
+//                                val requestBody = byteArray.toRequestBody("image/png".toMediaTypeOrNull())
+//                                val fileName = "image_$index.jpeg"
+//                                println("Image $fileName: ${byteArray.size} bytes")
+//                                MultipartBody.Part.createFormData("images", fileName, requestBody)
+//                            }
+//                        }
+
+                        val parts = listOf(part)
 
                         // Wrap the API call in a coroutine using launch
                         scope.launch {
@@ -147,4 +173,18 @@ fun FaceLoginScreen(
     }
 
 }
+
+fun encodetoBase64(filePath: String): String {
+    val imageBytes: ByteArray = Files.readAllBytes(Paths.get(filePath))
+
+    // Encode the byte array to Base64
+    val base64String= Base64.getEncoder().encodeToString(imageBytes)
+    println("Base64 string :"+base64String)
+    return base64String;
+}
+
+fun base64ToNumericValues(base64: String): List<Int> {
+    return base64.toCharArray().map { it.code }
+}
+
 
