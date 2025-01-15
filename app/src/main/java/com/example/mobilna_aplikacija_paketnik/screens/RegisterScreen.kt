@@ -10,10 +10,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
@@ -176,6 +178,16 @@ fun RegisterScreen(registerInter: RegisterInterFace, navController: NavControlle
                     enabled = picturesTaken.value < 2 // Enable the button if picturesTaken is less than 2
                 ) {
                     Text("Capture Pictures")
+                }
+
+                Button(
+                    onClick = { navController.navigate("TSPVisual") },
+                    modifier = Modifier.padding(16.dp),
+                    shape = CircleShape,
+                    contentPadding = PaddingValues(16.dp),
+                    colors = ButtonDefaults.buttonColors(Color(0x30, 0x30, 0x36))
+                ) {
+                    Text("TSP Map")
                 }
 
                 Button(

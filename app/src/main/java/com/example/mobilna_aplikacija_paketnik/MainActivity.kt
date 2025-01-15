@@ -27,8 +27,10 @@ import com.example.mobilna_aplikacija_paketnik.API.Box.BoxInterface
 import com.example.mobilna_aplikacija_paketnik.API.Log.LogRequest
 import com.example.mobilna_aplikacija_paketnik.API.Login.LoginInterface
 import com.example.mobilna_aplikacija_paketnik.API.OpenBox.OpenInterface
+import com.example.mobilna_aplikacija_paketnik.API.TSPVisual.TSPVisualInterface
 import com.example.mobilna_aplikacija_paketnik.screens.CameraScreen
 import com.example.mobilna_aplikacija_paketnik.screens.HomeScreen
+import com.example.mobilna_aplikacija_paketnik.screens.TSPVisualMap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -67,6 +69,9 @@ class MainActivity : ComponentActivity() {
         val boxInter = retrofit.create(BoxInterface::class.java)
         val openInter = retrofitAPI.create(OpenInterface::class.java)
         val faceLogInter = retrofit.create(FaceLoginInterface::class.java)
+
+        val TSPVisualInter = retrofit.create(TSPVisualInterface::class.java)
+
 
         val UID = "646f3b6e69a3a1f7b9a12152"
         val threshold = 10
@@ -133,6 +138,9 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("face"){
                         FaceLoginScreen(navController, faceLogInter, sharedPreferences)
+                    }
+                    composable("TSPVisual"){
+                        TSPVisualMap(navController,  sharedPreferences) //TODO
                     }
                 }
             }
