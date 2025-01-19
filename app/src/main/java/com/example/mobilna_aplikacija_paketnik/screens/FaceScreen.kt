@@ -1,3 +1,6 @@
+package com.example.mobilna_aplikacija_paketnik.screens
+
+import FaceLoginInterface
 import android.Manifest
 import android.content.Context
 import android.content.SharedPreferences
@@ -22,20 +25,27 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import androidx.navigation.NavController
+import com.example.mobilna_aplikacija_paketnik.API.FaceLogin.FaceLoginRequest
 import com.example.mobilna_aplikacija_paketnik.API.FaceLogin.FaceLoginResponse
-import com.example.mobilna_aplikacija_paketnik.API.Register.RegisterResponse
-import com.example.mobilna_aplikacija_paketnik.API.Register.RegisterUser
+import com.example.mobilna_aplikacija_paketnik.CompressionUtility
 import com.example.mobilna_aplikacija_paketnik.screens.Footer
 import com.example.mobilna_aplikacija_paketnik.screens.Header
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Response
-
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileOutputStream
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.util.Base64
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 
 @Composable
 fun FaceLoginScreen(
@@ -104,32 +114,34 @@ fun FaceLoginScreen(
                 onClick = {
                     if (capturedPictures.size == 3) {
                         val username = sharedPreferences.getString("username", "") ?: ""
-                        val parts = capturedPictures.mapIndexedNotNull { index, bitmap ->
-                            bitmap?.let {
-                                val byteArray = it.toByteArray()
-                                val requestBody = byteArray.toRequestBody("image/png".toMediaTypeOrNull())
-                                val fileName = "image_$index.jpeg"
-                                println("Image $fileName: ${byteArray.size} bytes")
-                                MultipartBody.Part.createFormData("images", fileName, requestBody)
+                        val zipFile=File(context.cacheDir, "captured_images.zip")
+                        ZipOutputStream(FileOutputStream(zipFile)).use { zipOut ->
+                            capturedPictures.forEachIndexed { index, bitmap ->
+                                val byteArray = bitmap.toByteArray()
+                                val zipEntry = ZipEntry("image_$index.jpeg")
+                                zipOut.putNextEntry(zipEntry)
+                                zipOut.write(byteArray)
+                                zipOut.closeEntry()
                             }
                         }
+                        val compressionUtility = CompressionUtility()
+                        val base64String = encodetoBase64(zipFile.absolutePath)
+                        var base64StringInt=base64ToNumericValues(base64String)
+                        val compressedData = compressionUtility.compress(base64StringInt)
+                        val request = FaceLoginRequest(compressedData.map { it.toInt() })
 
                         // Wrap the API call in a coroutine using launch
                         scope.launch {
                             try {
-                                val response: Response<FaceLoginResponse> = faceLoginInterface.loginFace(username, parts)
-
+                                val response = faceLoginInterface.loginFace(username, request)
                                 if (response.isSuccessful) {
-                                    // Handle successful login
-                                    println("Image upload successful")
+                                    println("Face login successful")
                                     navController.navigate("home")
                                 } else {
-                                    // Handle login failure
-                                    println("Image upload failed")
+                                    println("Face login failed")
                                 }
                             } catch (e: Exception) {
-                                // Handle exception
-                                println("Image upload failed: ${e.message}")
+                                println("Face login failed: ${e.message}")
                             }
                         }
                     } else {
@@ -148,3 +160,23 @@ fun FaceLoginScreen(
 
 }
 
+fun encodetoBase64(filePath: String): String {
+    val imageBytes: ByteArray = Files.readAllBytes(Paths.get(filePath))
+
+    // Encode the byte array to Base64
+    val base64String= Base64.getEncoder().encodeToString(imageBytes)
+    println("Base64 string :"+base64String)
+    return base64String;
+}
+
+fun base64ToNumericValues(base64: String): List<Int> {
+    return base64.toCharArray().map { it.code }
+}
+
+//*
+fun Bitmap.toByteArray(): ByteArray {
+    val stream = ByteArrayOutputStream()
+    this.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+    return stream.toByteArray()
+}
+//*/

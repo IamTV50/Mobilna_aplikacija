@@ -1,7 +1,6 @@
 package com.example.mobilna_aplikacija_paketnik
 
 import FaceLoginInterface
-import FaceLoginScreen
 import com.example.mobilna_aplikacija_paketnik.API.Log.LogInterface
 import LogScreen
 import LoginScreen
@@ -29,6 +28,7 @@ import com.example.mobilna_aplikacija_paketnik.API.Login.LoginInterface
 import com.example.mobilna_aplikacija_paketnik.API.OpenBox.OpenInterface
 import com.example.mobilna_aplikacija_paketnik.API.TSPVisual.TSPVisualInterface
 import com.example.mobilna_aplikacija_paketnik.screens.CameraScreen
+import com.example.mobilna_aplikacija_paketnik.screens.FaceLoginScreen
 import com.example.mobilna_aplikacija_paketnik.screens.HomeScreen
 import com.example.mobilna_aplikacija_paketnik.screens.TSPVisualMap
 import kotlinx.coroutines.CoroutineScope
@@ -111,39 +111,39 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-            setContent {
-                val navController = rememberNavController()
+        setContent {
+            val navController = rememberNavController()
 
-                NavHost(navController, startDestination = "register") {
-                    composable("home") {
-                        HomeScreen(navController)
-                    }
-                    composable("camera") {
-                        CameraScreen(
-                            navController,
-                            openInter,
-                            logInter,
-                            sharedPreferences,
-                            boxInter
-                        )
-                    }
-                    composable("login") {
-                        LoginScreen(loginInter, navController = navController, faceLogInter)
-                    }
-                    composable("register") {
-                        RegisterScreen(registerInter, navController,sharedPreferences )
-                    }
-                    composable("logs") {
-                        LogScreen(navController, logInter, sharedPreferences)
-                    }
-                    composable("face"){
-                        FaceLoginScreen(navController, faceLogInter, sharedPreferences)
-                    }
-                    composable("TSPVisual"){
-                        TSPVisualMap(navController,  sharedPreferences) //TODO
-                    }
+            NavHost(navController, startDestination = "face") {
+                composable("home") {
+                    HomeScreen(navController)
+                }
+                composable("camera") {
+                    CameraScreen(
+                        navController,
+                        openInter,
+                        logInter,
+                        sharedPreferences,
+                        boxInter
+                    )
+                }
+                composable("login") {
+                    LoginScreen(loginInter, navController = navController, faceLogInter)
+                }
+                composable("register") {
+                    RegisterScreen(registerInter, navController,sharedPreferences )
+                }
+                composable("logs") {
+                    LogScreen(navController, logInter, sharedPreferences)
+                }
+                composable("face"){
+                    FaceLoginScreen(navController, faceLogInter, sharedPreferences)
+                }
+                composable("TSPVisual"){
+                    TSPVisualMap(navController,  sharedPreferences)
                 }
             }
+        }
 
 
     }
